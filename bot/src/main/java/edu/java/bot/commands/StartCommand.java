@@ -5,15 +5,17 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.executor.RequestExecutor;
-import edu.java.bot.model.Command;
+import edu.java.bot.util.TextResolver;
 import java.util.List;
+import java.util.Map;
 
-public class StartCommand implements Command {
+public class StartCommand extends AbstractCommand {
 
-    private RequestExecutor requestExecutor;
-    private List<BotCommand> commands;
+    private final RequestExecutor requestExecutor;
+    private final List<Command> commands;
 
-    public StartCommand(RequestExecutor requestExecutor, List<BotCommand> commands) {
+    public StartCommand(TextResolver textResolver, RequestExecutor requestExecutor, List<Command> commands) {
+        super(textResolver);
         this.requestExecutor = requestExecutor;
         this.commands = commands;
     }
@@ -25,12 +27,24 @@ public class StartCommand implements Command {
 
     @Override
     public String description() {
-        return null;
+        return "command.start.description";
     }
 
     @Override
     public SendMessage handle(Update update) {
-        requestExecutor.execute(new SetMyCommands(commands.toArray(new BotCommand[0])));
-        return new SendMessage(update.message().chat().id(), "Начало работы");
+        requestExecutor.execute(
+            new SetMyCommands(commands.stream()
+                .map(Command::toApiCommand)
+                .toList()
+                .toArray(new BotCommand[0])
+            )
+        );
+        return new SendMessage(
+            update.message().chat().id(),
+            textResolver.resolve(
+                "command.start.hello_message",
+                Map.of("user_name", update.message().chat().firstName())
+            )
+        );
     }
 }

@@ -1,11 +1,17 @@
 package edu.java.bot.service;
 
+import edu.java.bot.model.response.AddLinkToTrackingResponse;
+import edu.java.bot.model.response.ListLinksResponse;
+import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
+
 public interface BotService {
 
-    void registerUser(String name, String id);
+    void registerUser(String name, Long id);
 
-    void linkUrlToUser(String url, String userId);
+    AddLinkToTrackingResponse linkUrlToUser(String url, Long userId);
 
-    void unlinkUrlFromUser(String url, String userId);
+    RemoveLinkFromTrackingResponse unlinkUrlFromUser(String url, Long userId);
+
+    ListLinksResponse listLinks(Long userId);
 
 }
