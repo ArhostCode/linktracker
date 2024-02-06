@@ -36,6 +36,7 @@ public class DefaultUserMessagesProcessor implements UserMessagesProcessor {
         registerCommand(new StartCommand(
             textResolver,
             requestExecutor,
+            botService,
             commands
         ));
         registerCommand(new TrackCommand(textResolver, botService));
