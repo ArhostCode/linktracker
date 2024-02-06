@@ -33,9 +33,11 @@ public class ListCommand extends AbstractCommand {
         }
         StringBuilder message = new StringBuilder();
         message.append(textResolver.resolve("command.list.main"));
-        response.links().forEach(link ->
-            message.append(link).append("\n")
-        );
-        return new SendMessage(update.message().chat().id(), message.toString());
+        int id = 1;
+        for (String link : response.links()) {
+            message.append(id).append(". ").append(link).append("\n");
+            id++;
+        }
+        return new SendMessage(update.message().chat().id(), message.toString()).disableWebPagePreview(true);
     }
 }

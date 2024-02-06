@@ -12,7 +12,8 @@ public interface Command {
     SendMessage handle(Update update);
 
     default boolean supports(Update update) {
-        return update.message().text() != null
+        return update.message() != null
+            && update.message().text() != null
             && update.message().text().split(" +")[0].equals(command());
     }
 

@@ -20,11 +20,9 @@ public class BotMessagesListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
-            if (update.message().text() != null) {
-                SendMessage sendMessage = userMessagesProcessor.process(update);
-                if (sendMessage != null) {
-                    requestExecutor.execute(sendMessage.parseMode(ParseMode.Markdown));
-                }
+            SendMessage sendMessage = userMessagesProcessor.process(update);
+            if (sendMessage != null) {
+                requestExecutor.execute(sendMessage.parseMode(ParseMode.Markdown));
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

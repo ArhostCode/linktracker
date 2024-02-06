@@ -55,9 +55,16 @@ public class DefaultUserMessagesProcessor implements UserMessagesProcessor {
                 return command.handle(update);
             }
         }
+        if (update.message() == null) {
+            return null;
+        }
+        String text = update.message().text();
         return new SendMessage(
             update.message().chat().id(),
-            textResolver.resolve("message.unknown_command", Map.of("command", update.message().text()))
+            textResolver.resolve(
+                "message.unknown_command",
+                Map.of("command", text != null ? text : "None")
+            )
         );
     }
 
