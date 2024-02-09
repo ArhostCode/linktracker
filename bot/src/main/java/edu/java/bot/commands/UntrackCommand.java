@@ -9,6 +9,7 @@ import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.util.Map;
+import java.util.UUID;
 
 public class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK_DATA_PREFIX = "untrack$";
@@ -44,16 +45,16 @@ public class UntrackCommand extends AbstractCommand {
     }
 
     private SendMessage processCallbackQuery(Update update) {
-        String link = update.callbackQuery().data().substring(UNTRACK_DATA_PREFIX.length());
+        String id = update.callbackQuery().data().substring(UNTRACK_DATA_PREFIX.length());
         long chatId = update.callbackQuery().from().id();
-        RemoveLinkFromTrackingResponse response = botService.unlinkUrlFromUser(link, chatId);
+        RemoveLinkFromTrackingResponse response = botService.unlinkUrlFromUser(UUID.fromString(id), chatId);
         if (!response.success()) {
             return new SendMessage(
                 chatId,
                 textResolver.resolve(
                     "command.untrack.error",
                     Map.of(
-                        "request_link", link,
+                        "request_link", id,
                         "error_message", response.errorMessage()
                     )
                 )
@@ -62,8 +63,7 @@ public class UntrackCommand extends AbstractCommand {
         return new SendMessage(
             chatId,
             textResolver.resolve(
-                "command.untrack.success",
-                Map.of("untracking_link", link)
+                "command.untrack.success"
             )
         );
     }
@@ -76,7 +76,7 @@ public class UntrackCommand extends AbstractCommand {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(
             response.links().stream()
                 .map(link -> new InlineKeyboardButton[] {
-                    new InlineKeyboardButton(link).callbackData(UNTRACK_DATA_PREFIX + link)})
+                    new InlineKeyboardButton(link.url()).callbackData(UNTRACK_DATA_PREFIX + link.uuid())})
                 .toList()
                 .toArray(new InlineKeyboardButton[0][0])
         );
