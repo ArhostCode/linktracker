@@ -13,7 +13,7 @@ public class DefaultRequestExecutorTest {
         "Тестирование метода DefaultRequestExecutor#execute должен выкинуть исключение если telegramBot не задан"
     )
     @Test
-    public void execute_shouldThrowIllegalStateException_whenTelegramBotNotSet() {
+    public void executeShouldThrowIllegalStateExceptionWhenTelegramBotNotSet() {
         RequestExecutor executor = new DefaultRequestExecutor(null);
         Assertions.assertThatThrownBy(() -> executor.execute(new SendMessage(1, "Test message")))
             .isInstanceOf(IllegalStateException.class);
@@ -23,7 +23,7 @@ public class DefaultRequestExecutorTest {
         "Тестирование метода DefaultRequestExecutor#execute должен выполнить запрос если telegramBot задан"
     )
     @Test
-    public void execute_shouldExecute_whenTelegramBotSet() {
+    public void executeShouldExecuteWhenTelegramBotSet() {
         TelegramBot mockTelegramBot = Mockito.mock(TelegramBot.class);
         RequestExecutor executor = new DefaultRequestExecutor(mockTelegramBot);
 

@@ -18,7 +18,7 @@ public class ListCommandTest {
 
     @DisplayName("Тестирование метода ListCommand#handle с пустым списком")
     @Test
-    public void handle_shouldReturnEmptyListMessage_whenListIsEmpty() {
+    public void handleShouldReturnEmptyListMessageWhenListIsEmpty() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.listLinks(Mockito.anyLong()))
             .thenReturn(new ListLinksResponse(List.of()));
@@ -34,7 +34,7 @@ public class ListCommandTest {
 
     @DisplayName("Тестирование метода ListCommand#handle с непустым списком")
     @Test
-    public void handle_shouldReturnListMessage_whenListIsNotEmpty() {
+    public void handleShouldReturnListMessageWhenListIsNotEmpty() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.listLinks(Mockito.anyLong()))
             .thenReturn(new ListLinksResponse(List.of(

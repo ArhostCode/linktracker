@@ -15,7 +15,7 @@ public class HelpCommandTest {
 
     @DisplayName("Тестирование метода HelpCommand#handle")
     @Test
-    public void handle_shouldReturnHelpMessage() {
+    public void handleShouldReturnHelpMessage() {
         HelpCommand command = new HelpCommand(createMockTextResolver(), List.of(createMockCommand()));
         Assertions.assertThat(command.handle(Utils.createMockUpdate("/help", 1L)).getParameters().get("text"))
             .isEqualTo("Main message/mock - mock description");

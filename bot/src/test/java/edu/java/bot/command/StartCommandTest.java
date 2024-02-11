@@ -16,7 +16,7 @@ public class StartCommandTest {
 
     @DisplayName("Тестирование метода StartCommand#handle")
     @Test
-    public void handle_shouldRegisterUser() {
+    public void handleShouldRegisterUser() {
         BotService mockBotService = Mockito.mock(BotService.class);
         StartCommand command = new StartCommand(
             createMockTextResolver(),

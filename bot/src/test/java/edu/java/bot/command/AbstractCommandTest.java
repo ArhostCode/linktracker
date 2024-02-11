@@ -24,7 +24,7 @@ public class AbstractCommandTest {
             "/dfdf,false",
         }
     )
-    public void supports_shouldReturnTrue_whenUpdateSupports(String text, boolean expected) {
+    public void supportsShouldReturnTrueWhenUpdateSupports(String text, boolean expected) {
         AbstractCommand command = new AbstractCommand(createMockTextResolver()) {
             @Override
             public String command() {
@@ -47,7 +47,7 @@ public class AbstractCommandTest {
 
     @DisplayName("Тестирование метода AbstractCommand#toApiCommand")
     @Test
-    public void toApiCommand_shouldReturnCommand() {
+    public void toApiCommandShouldReturnCommand() {
         AbstractCommand command = new AbstractCommand(createMockTextResolver()) {
             @Override
             public String command() {

@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 public class BotMessagesListenerTest {
     @DisplayName("Тестирование метода BotMessagesListener#process")
     @Test
-    public void process_shouldAcceptUpdates() {
+    public void processShouldAcceptUpdates() {
         BotMessagesListener listener = new BotMessagesListener(
             createMockExecutor(),
             createMockUserMessagesProcessor()

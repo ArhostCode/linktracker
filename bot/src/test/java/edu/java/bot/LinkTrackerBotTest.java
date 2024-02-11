@@ -12,7 +12,7 @@ public class LinkTrackerBotTest {
 
     @DisplayName("Тестирование метода LinkTrackerBot#start")
     @Test
-    public void start_shouldStart() {
+    public void startShouldStart() {
 
         TelegramBot bot = Mockito.mock(TelegramBot.class);
         LinkTrackerBot linkTrackerBot = new LinkTrackerBot(

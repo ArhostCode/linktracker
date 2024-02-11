@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.Utils;
 import edu.java.bot.commands.Command;
+import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.util.ArrayList;
 import org.assertj.core.api.Assertions;
@@ -16,10 +17,10 @@ public class DefaultUserMessagesProcessorTest {
 
     @DisplayName("Тестирование метода DefaultUserMessagesProcessor#registerCommand")
     @Test
-    public void registerCommand_shouldRegisterCommand() {
+    public void registerCommandShouldRegisterCommand() {
         UserMessagesProcessor processor = new DefaultUserMessagesProcessor(
             createMockTextResolver(),
-            new ArrayList<>()
+            Mockito.mock(BotService.class)
         );
         processor.registerCommand(createMockCommand());
         Assertions.assertThat(processor.commands()).anyMatch(
@@ -29,10 +30,10 @@ public class DefaultUserMessagesProcessorTest {
 
     @DisplayName("Тестирование метода DefaultUserMessagesProcessor#process с корректными командой и сообщением")
     @Test
-    public void process_shouldExecuteCommand() {
+    public void processShouldExecuteCommand() {
         UserMessagesProcessor processor = new DefaultUserMessagesProcessor(
             createMockTextResolver(),
-            new ArrayList<>()
+            Mockito.mock(BotService.class)
         );
         processor.registerCommand(createMockCommand());
 
@@ -42,10 +43,10 @@ public class DefaultUserMessagesProcessorTest {
 
     @DisplayName("Тестирование метода DefaultUserMessagesProcessor#process с корректной командой и null сообщением")
     @Test
-    public void process_shouldReturnNull_whenMessageIsNull() {
+    public void processShouldReturnNullWhenMessageIsNull() {
         UserMessagesProcessor processor = new DefaultUserMessagesProcessor(
             createMockTextResolver(),
-            new ArrayList<>()
+            Mockito.mock(BotService.class)
         );
         processor.registerCommand(createMockCommand());
 
@@ -55,10 +56,10 @@ public class DefaultUserMessagesProcessorTest {
     @DisplayName(
         "Тестирование метода DefaultUserMessagesProcessor#process с корректной командой и некорректным сообщением")
     @Test
-    public void process_shouldReturnNotFound_whenCommandNotFound() {
+    public void processShouldReturnNotFoundWhenCommandNotFound() {
         UserMessagesProcessor processor = new DefaultUserMessagesProcessor(
             createMockTextResolver(),
-            new ArrayList<>()
+            Mockito.mock(BotService.class)
         );
         processor.registerCommand(createMockCommand());
 

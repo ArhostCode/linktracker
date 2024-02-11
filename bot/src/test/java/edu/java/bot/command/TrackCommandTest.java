@@ -15,7 +15,7 @@ public class TrackCommandTest {
 
     @DisplayName("Тестирование метода TrackCommand#handle с валидными данными и ответом сервера")
     @Test
-    public void handle_shouldTrackLink() {
+    public void handleShouldTrackLink() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.linkUrlToUser(Mockito.anyString(), Mockito.anyLong()))
             .thenReturn(new AddLinkToTrackingResponse(true, null));
@@ -31,7 +31,7 @@ public class TrackCommandTest {
 
     @DisplayName("Тестирование метода TrackCommand#handle с валидными данными и ошибкой сервера")
     @Test
-    public void handle_shouldReturnError_whenServerError() {
+    public void handleShouldReturnErrorWhenServerError() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.linkUrlToUser(Mockito.anyString(), Mockito.anyLong()))
             .thenReturn(new AddLinkToTrackingResponse(false, "null"));
@@ -47,7 +47,7 @@ public class TrackCommandTest {
 
     @DisplayName("Тестирование метода TrackCommand#handle с невалидными данными")
     @Test
-    public void handle_shouldReturnError_whenInvalidUrl() {
+    public void handleShouldReturnErrorWhenInvalidUrl() {
         BotService mockBotService = Mockito.mock(BotService.class);
         TrackCommand command = new TrackCommand(
             createMockTextResolver(),
@@ -61,7 +61,7 @@ public class TrackCommandTest {
 
     @DisplayName("Тестирование метода TrackCommand#handle с невалидным исползованием команды")
     @Test
-    public void handle_shouldReturnError_whenInvalidCommandUsage() {
+    public void handleShouldReturnErrorWhenInvalidCommandUsage() {
         BotService mockBotService = Mockito.mock(BotService.class);
         TrackCommand command = new TrackCommand(
             createMockTextResolver(),

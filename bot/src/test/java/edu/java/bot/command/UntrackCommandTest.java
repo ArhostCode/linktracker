@@ -24,7 +24,7 @@ public class UntrackCommandTest {
 
     @DisplayName("Тестирование метода UntrackCommand#handle на создание сообщения с пустым списком ссылок")
     @Test
-    public void handle_shouldCreateMessageEmpty_whenListIsEmpty() {
+    public void handleShouldCreateMessageEmptyWhenListIsEmpty() {
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.listLinks(Mockito.anyLong()))
             .thenReturn(new ListLinksResponse(Collections.emptyList()));
@@ -39,7 +39,7 @@ public class UntrackCommandTest {
 
     @DisplayName("Тестирование метода UntrackCommand#handle на создание сообщения")
     @Test
-    public void handle_shouldCreateMessage() {
+    public void handleShouldCreateMessage() {
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.listLinks(Mockito.anyLong()))
             .thenReturn(new ListLinksResponse(List.of(new Link("test", UUID.randomUUID()))));
@@ -58,7 +58,7 @@ public class UntrackCommandTest {
 
     @DisplayName("Тестирование метода UntrackCommand#handle с callback")
     @Test
-    public void handle_shouldProcessCallback() {
+    public void handleShouldProcessCallback() {
         Link link = new Link("test", UUID.randomUUID());
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
@@ -75,7 +75,7 @@ public class UntrackCommandTest {
 
     @DisplayName("Тестирование метода UntrackCommand#handle с callback с ошибкой")
     @Test
-    public void handle_shouldReturnError_whenServiceError() {
+    public void handleShouldReturnErrorWhenServiceError() {
         Link link = new Link("test", UUID.randomUUID());
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
