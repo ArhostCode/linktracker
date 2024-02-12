@@ -1,0 +1,4 @@
+message:
+  sample: Пример сообщения
+  insertions: Добро пожаловать, %user_name%
+next: Другое сообщение
