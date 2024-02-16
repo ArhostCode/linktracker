@@ -1,5 +1,6 @@
 package edu.java.scrapper.provider.stackoverflow;
 
+import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.provider.api.LinkInformation;
@@ -17,7 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 
 public class StackOverflowProviderTest {
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().dynamicPort());
+    public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().dynamicPort().notifier(new ConsoleNotifier(true)));
 
     @Before
     public void setUp() {
