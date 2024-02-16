@@ -4,8 +4,8 @@ import edu.java.provider.InformationProviderChain;
 import edu.java.provider.api.InformationProvider;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import java.net.URL;
 

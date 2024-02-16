@@ -2,14 +2,13 @@ package edu.java.scrapper.provider.stackoverflow;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.provider.api.LinkInformation;
-import edu.java.provider.github.GithubInformationProvider;
-import java.net.URL;
 import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
+import java.net.URL;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
