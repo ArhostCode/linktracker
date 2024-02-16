@@ -6,7 +6,7 @@ public abstract class InformationProvider {
 
     private InformationProvider next;
 
-    protected abstract boolean isSupported(URL url);
+    public abstract boolean isSupported(URL url);
 
     protected abstract LinkInformation fetchInformation(URL url);
 

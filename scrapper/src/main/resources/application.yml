@@ -1,5 +1,4 @@
 app:
-  help: "asdsad"
   scheduler:
     enable: true
     interval: 10s

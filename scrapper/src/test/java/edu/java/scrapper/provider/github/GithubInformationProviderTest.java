@@ -35,6 +35,9 @@ public class GithubInformationProviderTest {
                       "language": "Java",
                       "description": "🛠️ Проект Tinkoff Java Course 2 семестр"
                     }""")));
+        stubFor(get(urlPathMatching("/repos/jij/hih"))
+            .willReturn(aResponse()
+                .withStatus(404)));
     }
 
     @SneakyThrows
@@ -46,10 +49,33 @@ public class GithubInformationProviderTest {
             .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
             .contains(
                 new URL("https://github.com/arhostcode/linktracker"),
-                "ArhostCode / linktracker",
-                "🛠️ Проект Tinkoff Java Course 2семестр"
+                "ArhostCode/linktracker",
+                "🛠️ Проект Tinkoff Java Course 2 семестр"
             );
+    }
 
+    @SneakyThrows
+    @Test
+    public void getInformationShouldReturnNullWhenRepositoryNotFound() {
+        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        var info = provider.getLinkInformation(new URL("https://github.com/jij/hih"));
+        Assertions.assertThat(info).isNull();
+    }
+
+    @SneakyThrows
+    @Test
+    public void isSupportedShouldReturnTrueIfHostIsValid() {
+        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        var info = provider.isSupported(new URL("https://github.com/jij/hih"));
+        Assertions.assertThat(info).isTrue();
+    }
+
+    @SneakyThrows
+    @Test
+    public void isSupportedShouldReturnFalseIfHostIsInValid() {
+        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        var info = provider.isSupported(new URL("https://gitlab.com/jij/hih"));
+        Assertions.assertThat(info).isFalse();
     }
 
 }
