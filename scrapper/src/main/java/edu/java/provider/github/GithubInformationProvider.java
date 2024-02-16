@@ -5,9 +5,7 @@ import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.WebClientInformationProvider;
 import java.net.URL;
 import java.time.OffsetDateTime;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import reactor.core.publisher.Mono;
 
 public class GithubInformationProvider extends WebClientInformationProvider {
 

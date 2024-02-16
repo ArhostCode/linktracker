@@ -51,7 +51,7 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     }
 
     private record StackOverflowInfoResponse(StackOverflowItem[] items) {
-        public static StackOverflowInfoResponse EMPTY = new StackOverflowInfoResponse(null);
+        public static final StackOverflowInfoResponse EMPTY = new StackOverflowInfoResponse(null);
     }
 
     private record StackOverflowItem(String title, @JsonProperty("last_activity_date") OffsetDateTime lastModified) {
