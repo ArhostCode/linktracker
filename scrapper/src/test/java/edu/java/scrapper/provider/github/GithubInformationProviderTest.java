@@ -1,29 +1,27 @@
 package edu.java.scrapper.provider.github;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import java.net.URL;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 public class GithubInformationProviderTest {
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(WireMockConfiguration.wireMockConfig().dynamicPort().notifier(new ConsoleNotifier(true)));
+    private static WireMockServer server;
 
-    @Before
-    public void setUp() {
-        stubFor(get(urlPathMatching("/repos/arhostcode/linktracker"))
+    @BeforeAll
+    public static void setUp() {
+        server = new WireMockServer(wireMockConfig().dynamicPort());
+        server.stubFor(get(urlPathMatching("/repos/arhostcode/linktracker"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
@@ -37,15 +35,16 @@ public class GithubInformationProviderTest {
                       "language": "Java",
                       "description": "🛠️ Проект Tinkoff Java Course 2 семестр"
                     }""")));
-        stubFor(get(urlPathMatching("/repos/jij/hih"))
+        server.stubFor(get(urlPathMatching("/repos/jij/hih"))
             .willReturn(aResponse()
                 .withStatus(404)));
+        server.start();
     }
 
     @SneakyThrows
     @Test
     public void getInformationShouldReturnCorrectInformation() {
-        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
         var info = provider.getLinkInformation(new URL("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
             .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
@@ -59,7 +58,7 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void getInformationShouldReturnNullWhenRepositoryNotFound() {
-        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
         var info = provider.getLinkInformation(new URL("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
     }
@@ -67,7 +66,7 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
-        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
         var info = provider.isSupported(new URL("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
     }
@@ -75,7 +74,7 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnFalseIfHostIsInValid() {
-        GithubInformationProvider provider = new GithubInformationProvider(wireMockRule.baseUrl());
+        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
         var info = provider.isSupported(new URL("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
     }
