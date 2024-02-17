@@ -2,7 +2,7 @@ package edu.java.provider.api;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
-public abstract class WebClientInformationProvider extends InformationProvider {
+public abstract class WebClientInformationProvider implements InformationProvider {
 
     protected WebClient webClient;
 

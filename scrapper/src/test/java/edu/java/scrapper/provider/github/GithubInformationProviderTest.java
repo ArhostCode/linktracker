@@ -45,7 +45,7 @@ public class GithubInformationProviderTest {
     @Test
     public void getInformationShouldReturnCorrectInformation() {
         GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
-        var info = provider.getLinkInformation(new URL("https://github.com/arhostcode/linktracker"));
+        var info = provider.fetchInformation(new URL("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
             .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
             .contains(
@@ -59,7 +59,7 @@ public class GithubInformationProviderTest {
     @Test
     public void getInformationShouldReturnNullWhenRepositoryNotFound() {
         GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
-        var info = provider.getLinkInformation(new URL("https://github.com/jij/hih"));
+        var info = provider.fetchInformation(new URL("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
     }
 

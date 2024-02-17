@@ -11,6 +11,7 @@ public class GithubInformationProvider extends WebClientInformationProvider {
 
     private static final String API_URL = "https://api.github.com";
     private static final String GITHUB_HOST = "github.com";
+    public static final String PROVIDER_TYPE = "github";
 
     public GithubInformationProvider(String apiUrl) {
         super(apiUrl);
@@ -26,7 +27,7 @@ public class GithubInformationProvider extends WebClientInformationProvider {
     }
 
     @Override
-    protected LinkInformation fetchInformation(URL url) {
+    public LinkInformation fetchInformation(URL url) {
         var info = webClient.get()
             .uri("/repos" + url.getPath())
             .accept(MediaType.APPLICATION_JSON)

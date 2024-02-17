@@ -15,6 +15,7 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow.com/questions/(\\d+).*");
     public static final String BASE_API_URL = "https://api.stackexchange.com/2.3";
     private static final String STACKOVERFLOW_HOST = "stackoverflow.com";
+    public static final String PROVIDER_TYPE = "stackoverflow";
 
     public StackOverflowInformationProvider(String apiUrl) {
         super(apiUrl);
@@ -30,7 +31,7 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     }
 
     @Override
-    protected LinkInformation fetchInformation(URL url) {
+    public LinkInformation fetchInformation(URL url) {
         Matcher matcher = QUESTION_PATTERN.matcher(url.toString());
         if (!matcher.matches()) {
             return null;

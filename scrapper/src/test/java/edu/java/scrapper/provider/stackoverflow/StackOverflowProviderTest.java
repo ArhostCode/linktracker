@@ -46,7 +46,7 @@ public class StackOverflowProviderTest {
     @Test
     public void getInformationShouldReturnCorrectInformation() {
         StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
-        var info = provider.getLinkInformation(new URL("https://stackoverflow.com/questions/100/?hello_world"));
+        var info = provider.fetchInformation(new URL("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info)
             .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
             .contains(
@@ -60,7 +60,7 @@ public class StackOverflowProviderTest {
     @Test
     public void getInformationShouldReturnNullWhenQuestionNotFound() {
         StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
-        var info = provider.getLinkInformation(new URL("https://stackoverflow.com/questions/101/?hello_world"));
+        var info = provider.fetchInformation(new URL("https://stackoverflow.com/questions/101/?hello_world"));
         Assertions.assertThat(info).isNull();
     }
 

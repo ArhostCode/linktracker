@@ -1,6 +1,6 @@
 package edu.java.configuration;
 
-import edu.java.provider.InformationProviderChain;
+import edu.java.provider.InformationProviders;
 import edu.java.provider.github.GithubInformationProvider;
 import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +12,17 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class ClientConfiguration {
 
     @Bean
-    public InformationProviderChain informationProviderChain() {
-        return InformationProviderChain.link(
-            new GithubInformationProvider(),
+    public InformationProviders informationProviders() {
+        InformationProviders informationProviders = new InformationProviders();
+        informationProviders.registerProvider(
+            GithubInformationProvider.PROVIDER_TYPE,
+            new GithubInformationProvider()
+        );
+        informationProviders.registerProvider(
+            StackOverflowInformationProvider.PROVIDER_TYPE,
             new StackOverflowInformationProvider()
         );
+        return informationProviders;
     }
 
 }
