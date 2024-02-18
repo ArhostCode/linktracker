@@ -68,7 +68,7 @@ public class StackOverflowProviderTest {
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
         StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
-        var info = provider.isSupported(new URL("https://stackoverflow.com/jij/hih"));
+        var info = provider.isSupported(new URL("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info).isTrue();
     }
 

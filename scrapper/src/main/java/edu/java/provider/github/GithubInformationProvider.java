@@ -5,12 +5,13 @@ import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.WebClientInformationProvider;
 import java.net.URL;
 import java.time.OffsetDateTime;
+import java.util.regex.Pattern;
 import org.springframework.http.MediaType;
 
 public class GithubInformationProvider extends WebClientInformationProvider {
 
+    private static final Pattern REPOSITORY_PATTERN = Pattern.compile("https://github.com/(.+)/(.+)");
     private static final String API_URL = "https://api.github.com";
-    private static final String GITHUB_HOST = "github.com";
     public static final String PROVIDER_TYPE = "github";
 
     public GithubInformationProvider(String apiUrl) {
@@ -23,11 +24,14 @@ public class GithubInformationProvider extends WebClientInformationProvider {
 
     @Override
     public boolean isSupported(URL url) {
-        return url.getHost().equals(GITHUB_HOST);
+        return REPOSITORY_PATTERN.matcher(url.toString()).matches();
     }
 
     @Override
     public LinkInformation fetchInformation(URL url) {
+        if (!isSupported(url)) {
+            return null;
+        }
         var info = webClient.get()
             .uri("/repos" + url.getPath())
             .accept(MediaType.APPLICATION_JSON)
