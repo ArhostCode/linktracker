@@ -7,22 +7,23 @@ import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Component
 public class StackOverflowInformationProvider extends WebClientInformationProvider {
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow.com/questions/(\\d+).*");
-    public static final String BASE_API_URL = "https://api.stackexchange.com/2.3";
 
-    public StackOverflowInformationProvider(String apiUrl) {
+    @Autowired
+    public StackOverflowInformationProvider(
+        @Value("${provider.stackoverflow.url}") String apiUrl
+    ) {
         super(apiUrl);
     }
 
     public StackOverflowInformationProvider() {
-        this(BASE_API_URL);
+        super("https://api.stackexchange.com/2.3");
     }
 
     @Override
@@ -42,18 +43,15 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
             return null;
         }
         var questionId = matcher.group(1);
-        var info = webClient
-            .get()
-            .uri("/questions/" + questionId + "?site=stackoverflow")
-            .accept(MediaType.APPLICATION_JSON)
-            .retrieve()
-            .onStatus(HttpStatusCode::isError, response -> Mono.empty())
-            .bodyToMono(StackOverflowInfoResponse.class)
-            .block();
+        var info = executeRequest(
+            "/questions/" + questionId + "?site=stackoverflow",
+            StackOverflowInfoResponse.class,
+            StackOverflowInfoResponse.EMPTY
+        );
         if (info == null || info.equals(StackOverflowInfoResponse.EMPTY) || info.items.length == 0) {
             return null;
         }
-        return new LinkInformation(url, info.items[0].title, null, info.items[0].lastModified);
+        return new LinkInformation(url, info.items()[0].title(), null, info.items()[0].lastModified());
     }
 
     private record StackOverflowInfoResponse(StackOverflowItem[] items) {
