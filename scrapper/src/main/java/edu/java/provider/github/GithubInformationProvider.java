@@ -7,12 +7,13 @@ import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.regex.Pattern;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GithubInformationProvider extends WebClientInformationProvider {
 
     private static final Pattern REPOSITORY_PATTERN = Pattern.compile("https://github.com/(.+)/(.+)");
     private static final String API_URL = "https://api.github.com";
-    public static final String PROVIDER_TYPE = "github";
 
     public GithubInformationProvider(String apiUrl) {
         super(apiUrl);
@@ -25,6 +26,11 @@ public class GithubInformationProvider extends WebClientInformationProvider {
     @Override
     public boolean isSupported(URL url) {
         return REPOSITORY_PATTERN.matcher(url.toString()).matches();
+    }
+
+    @Override
+    public String getType() {
+        return "github";
     }
 
     @Override

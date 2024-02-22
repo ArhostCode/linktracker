@@ -9,12 +9,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+@Component
 public class StackOverflowInformationProvider extends WebClientInformationProvider {
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow.com/questions/(\\d+).*");
     public static final String BASE_API_URL = "https://api.stackexchange.com/2.3";
-    public static final String PROVIDER_TYPE = "stackoverflow";
 
     public StackOverflowInformationProvider(String apiUrl) {
         super(apiUrl);
@@ -27,6 +28,11 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     @Override
     public boolean isSupported(URL url) {
         return QUESTION_PATTERN.matcher(url.toString()).matches();
+    }
+
+    @Override
+    public String getType() {
+        return "stackoverflow";
     }
 
     @Override

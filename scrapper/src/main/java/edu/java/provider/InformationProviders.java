@@ -3,7 +3,9 @@ package edu.java.provider;
 import edu.java.provider.api.InformationProvider;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InformationProviders {
 
     private final Map<String, InformationProvider> providers = new HashMap<>();
