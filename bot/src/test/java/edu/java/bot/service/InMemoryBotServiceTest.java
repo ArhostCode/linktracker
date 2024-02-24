@@ -19,12 +19,12 @@ public class InMemoryBotServiceTest {
     @Test
     public void linkUrlToUserShouldLinkUrlToUser() {
         InMemoryBotService service = new InMemoryBotService();
-        service.linkUrlToUser("link", 123L);
+        service.linkUrlToUser("http://localhost2.ru", 123L);
         Assertions.assertThat(service.listLinks(123L).links())
             .hasSize(1)
             .element(0)
-            .extracting("url")
-            .isEqualTo("link");
+            .extracting("uri")
+            .isEqualTo("http://localhost2.ru");
 
     }
 
@@ -33,7 +33,7 @@ public class InMemoryBotServiceTest {
     public void unlinkUrlFromUserShouldUnlinkUrlFromUser() {
         InMemoryBotService service = new InMemoryBotService();
         service.linkUrlToUser("link", 123L);
-        UUID linkId = service.listLinks(123L).links().getFirst().uuid();
+        Long linkId = service.listLinks(123L).links().getFirst().id();
         service.unlinkUrlFromUser(linkId, 123L);
         Assertions.assertThat(service.listLinks(123L).links())
             .hasSize(0);

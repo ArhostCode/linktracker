@@ -6,8 +6,8 @@ import edu.java.bot.model.Link;
 import edu.java.bot.model.response.ListLinksResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
+import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,8 +38,8 @@ public class ListCommandTest {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.listLinks(Mockito.anyLong()))
             .thenReturn(new ListLinksResponse(List.of(
-                new Link("link1", UUID.randomUUID()),
-                new Link("link2", UUID.randomUUID())
+                new Link(1L, URI.create("http://localhost.ru"), ""),
+                new Link(2L, URI.create("http://localhost2.ru"), "")
             )));
         ListCommand command = new ListCommand(
             createMockTextResolver(),
@@ -47,7 +47,7 @@ public class ListCommandTest {
         );
 
         Assertions.assertThat(command.handle(Utils.createMockUpdate("/list", 1L)).getParameters().get("text"))
-            .isEqualTo("List:\n1. link1\n2. link2\n");
+            .isEqualTo("List:\n1. http://localhost.ru\n2. http://localhost2.ru\n");
         Mockito.verify(mockBotService, Mockito.times(1)).listLinks(1L);
     }
 

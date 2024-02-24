@@ -9,7 +9,6 @@ import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.util.Map;
-import java.util.UUID;
 
 public class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK_DATA_PREFIX = "untrack$";
@@ -47,7 +46,7 @@ public class UntrackCommand extends AbstractCommand {
     private SendMessage processCallbackQuery(Update update) {
         String id = update.callbackQuery().data().substring(UNTRACK_DATA_PREFIX.length());
         long chatId = update.callbackQuery().from().id();
-        RemoveLinkFromTrackingResponse response = botService.unlinkUrlFromUser(UUID.fromString(id), chatId);
+        RemoveLinkFromTrackingResponse response = botService.unlinkUrlFromUser(Long.parseLong(id), chatId);
         if (!response.success()) {
             return new SendMessage(
                 chatId,
@@ -76,7 +75,7 @@ public class UntrackCommand extends AbstractCommand {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(
             response.links().stream()
                 .map(link -> new InlineKeyboardButton[] {
-                    new InlineKeyboardButton(link.url()).callbackData(UNTRACK_DATA_PREFIX + link.uuid())})
+                    new InlineKeyboardButton(link.uri().toString()).callbackData(UNTRACK_DATA_PREFIX + link.id())})
                 .toList()
                 .toArray(new InlineKeyboardButton[0][0])
         );

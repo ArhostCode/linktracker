@@ -12,9 +12,9 @@ import edu.java.bot.model.response.ListLinksResponse;
 import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class UntrackCommandTest {
     public void handleShouldCreateMessage() {
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.listLinks(Mockito.anyLong()))
-            .thenReturn(new ListLinksResponse(List.of(new Link("test", UUID.randomUUID()))));
+            .thenReturn(new ListLinksResponse(List.of(new Link(1L, URI.create("http://localhost.ru"), ""))));
         UntrackCommand command = new UntrackCommand(
             createMockTextResolver(),
             botService
@@ -53,13 +53,13 @@ public class UntrackCommandTest {
         Assertions.assertThat(((InlineKeyboardMarkup) message.getParameters()
             .get("reply_markup"))
             .inlineKeyboard()[0]
-        ).anyMatch(inlineKeyboardButton -> inlineKeyboardButton.text().equals("test"));
+        ).anyMatch(inlineKeyboardButton -> inlineKeyboardButton.text().equals("http://localhost.ru"));
     }
 
     @DisplayName("Тестирование метода UntrackCommand#handle с callback")
     @Test
     public void handleShouldProcessCallback() {
-        Link link = new Link("test", UUID.randomUUID());
+        Link link = new Link(1L, URI.create("http://localhost.ru"), "test");
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
             .thenReturn(new RemoveLinkFromTrackingResponse(true, ""));
@@ -70,13 +70,13 @@ public class UntrackCommandTest {
         SendMessage message = command.handle(createMockUpdate(link));
         Assertions.assertThat(message.getParameters().get("text"))
             .isEqualTo("Success");
-        Mockito.verify(botService, Mockito.times(1)).unlinkUrlFromUser(link.uuid(), 1L);
+        Mockito.verify(botService, Mockito.times(1)).unlinkUrlFromUser(link.id(), 1L);
     }
 
     @DisplayName("Тестирование метода UntrackCommand#handle с callback с ошибкой")
     @Test
     public void handleShouldReturnErrorWhenServiceError() {
-        Link link = new Link("test", UUID.randomUUID());
+        Link link = new Link(1L, URI.create("http://localhost.ru"), "test");
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
             .thenReturn(new RemoveLinkFromTrackingResponse(false, ""));
@@ -87,7 +87,7 @@ public class UntrackCommandTest {
         SendMessage message = command.handle(createMockUpdate(link));
         Assertions.assertThat(message.getParameters().get("text"))
             .isEqualTo("Error");
-        Mockito.verify(botService, Mockito.times(1)).unlinkUrlFromUser(link.uuid(), 1L);
+        Mockito.verify(botService, Mockito.times(1)).unlinkUrlFromUser(link.id(), 1L);
     }
 
     private TextResolver createMockTextResolver() {
@@ -108,7 +108,7 @@ public class UntrackCommandTest {
         CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
         User user = Mockito.mock(User.class);
         Mockito.when(user.id()).thenReturn(1L);
-        Mockito.when(callbackQuery.data()).thenReturn(String.format("untrack$%s", untrackLink.uuid()));
+        Mockito.when(callbackQuery.data()).thenReturn(String.format("untrack$%s", untrackLink.id()));
         Mockito.when(callbackQuery.from()).thenReturn(user);
         Mockito.when(update.callbackQuery()).thenReturn(callbackQuery);
         return update;
