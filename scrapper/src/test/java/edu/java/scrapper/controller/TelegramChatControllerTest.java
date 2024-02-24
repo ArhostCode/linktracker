@@ -2,7 +2,7 @@ package edu.java.scrapper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.controller.TelegramChatController;
-import edu.java.exception.ChatAlreadyRegistered;
+import edu.java.exception.ChatAlreadyRegisteredException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.model.response.ApiErrorResponse;
 import edu.java.service.ChatService;
@@ -43,7 +43,7 @@ public class TelegramChatControllerTest {
     @Test
     @DisplayName("Тестирование TelegramChatController#registerChat при повторной регистрации")
     public void registerChatShouldReturnErrorWhenAlreadyRegistered() throws Exception {
-        Mockito.doThrow(ChatAlreadyRegistered.class).when(chatService).registerChat(10L);
+        Mockito.doThrow(new ChatAlreadyRegisteredException(10L)).when(chatService).registerChat(10L);
         var result = mockMvc.perform(
             MockMvcRequestBuilders
                 .post("/tg-chat/10")
@@ -52,7 +52,7 @@ public class TelegramChatControllerTest {
         ApiErrorResponse error =
             objectMapper.readValue(result.getResponse().getContentAsString(), ApiErrorResponse.class);
         Assertions.assertThat(error).extracting("code", "exceptionName")
-            .contains("400", "ChatAlreadyRegistered");
+            .contains("400", "ChatAlreadyRegisteredException");
         Mockito.verify(chatService).registerChat(10L);
     }
 
@@ -70,7 +70,7 @@ public class TelegramChatControllerTest {
     @Test
     @DisplayName("Тестирование TelegramChatController#deleteChat при некорректных данных")
     public void deleteChatShouldReturnError() throws Exception {
-        Mockito.doThrow(ChatNotFoundException.class).when(chatService).deleteChat(10L);
+        Mockito.doThrow(new ChatNotFoundException(10L)).when(chatService).deleteChat(10L);
         mockMvc.perform(
             MockMvcRequestBuilders
                 .delete("/tg-chat/10")
