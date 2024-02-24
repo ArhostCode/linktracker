@@ -2,7 +2,7 @@ package edu.java.bot.command;
 
 import edu.java.bot.Utils;
 import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.model.response.AddLinkToTrackingResponse;
+import edu.java.bot.dto.response.AddLinkToTrackingResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import org.assertj.core.api.Assertions;

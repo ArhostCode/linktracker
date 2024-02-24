@@ -1,8 +1,8 @@
 package edu.java.bot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.java.bot.model.Link;
-import edu.java.bot.model.response.ApiErrorResponse;
+import edu.java.bot.dto.Link;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.service.LinkNotificationService;
 import java.net.URI;
 import java.util.List;

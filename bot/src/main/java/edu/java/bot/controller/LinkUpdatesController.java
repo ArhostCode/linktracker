@@ -1,7 +1,7 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.model.Link;
-import edu.java.bot.model.request.LinkUpdate;
+import edu.java.bot.dto.Link;
+import edu.java.bot.dto.request.LinkUpdate;
 import edu.java.bot.service.LinkNotificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

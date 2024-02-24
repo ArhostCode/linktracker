@@ -1,7 +1,7 @@
 package edu.java.service;
 
-import edu.java.model.response.LinkResponse;
-import edu.java.model.response.ListLinksResponse;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import java.net.URI;
 import org.springframework.stereotype.Component;
 

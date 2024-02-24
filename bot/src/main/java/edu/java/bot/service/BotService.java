@@ -1,8 +1,8 @@
 package edu.java.bot.service;
 
-import edu.java.bot.model.response.AddLinkToTrackingResponse;
-import edu.java.bot.model.response.ListLinksResponse;
-import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
+import edu.java.bot.dto.response.AddLinkToTrackingResponse;
+import edu.java.bot.dto.response.ListLinksResponse;
+import edu.java.bot.dto.response.RemoveLinkFromTrackingResponse;
 
 public interface BotService {
 

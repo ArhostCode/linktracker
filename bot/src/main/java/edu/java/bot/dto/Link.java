@@ -1,4 +1,4 @@
-package edu.java.bot.model;
+package edu.java.bot.dto;
 
 import java.net.URI;
 

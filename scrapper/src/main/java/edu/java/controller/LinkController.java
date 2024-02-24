@@ -1,13 +1,12 @@
 package edu.java.controller;
 
-import edu.java.model.request.AddLinkRequest;
-import edu.java.model.request.RemoveLinkRequest;
-import edu.java.model.response.LinkResponse;
-import edu.java.model.response.ListLinksResponse;
+import edu.java.dto.request.AddLinkRequest;
+import edu.java.dto.request.RemoveLinkRequest;
+import edu.java.dto.response.LinkResponse;
+import edu.java.dto.response.ListLinksResponse;
 import edu.java.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

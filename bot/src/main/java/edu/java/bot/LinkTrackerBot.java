@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.commands.Command;
 import edu.java.bot.executor.RequestExecutor;
 import edu.java.bot.listener.BotMessagesListener;
-import edu.java.bot.model.Bot;
 import edu.java.bot.processor.UserMessagesProcessor;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

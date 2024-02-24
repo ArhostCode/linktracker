@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.controller.TelegramChatController;
 import edu.java.exception.ChatAlreadyRegisteredException;
 import edu.java.exception.ChatNotFoundException;
-import edu.java.model.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.service.ChatService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

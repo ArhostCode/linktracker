@@ -1,6 +1,6 @@
 package edu.java.exception;
 
-import edu.java.model.response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.TypeMismatchException;

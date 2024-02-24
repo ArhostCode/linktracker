@@ -2,7 +2,7 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.response.AddLinkToTrackingResponse;
+import edu.java.bot.dto.response.AddLinkToTrackingResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.util.Map;

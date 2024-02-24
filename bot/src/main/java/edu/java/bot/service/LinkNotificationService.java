@@ -1,6 +1,6 @@
 package edu.java.bot.service;
 
-import edu.java.bot.model.Link;
+import edu.java.bot.dto.Link;
 import java.util.List;
 
 public interface LinkNotificationService {
