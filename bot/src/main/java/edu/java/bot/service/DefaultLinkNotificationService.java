@@ -1,7 +1,6 @@
 package edu.java.bot.service;
 
-import edu.java.bot.dto.Link;
-import java.util.List;
+import edu.java.bot.dto.request.LinkUpdate;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class DefaultLinkNotificationService implements LinkNotificationService {
     @Override
-    public void notifyLinkUpdate(Link link, List<Long> chatIds) {
-        chatIds.forEach(chatId -> {
+    public void notifyLinkUpdate(LinkUpdate link) {
+        link.tgChatIds().forEach(chatId -> {
             log.info("{} handle update {} link", chatId, link);
         });
     }

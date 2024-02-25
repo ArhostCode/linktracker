@@ -1,10 +1,9 @@
 package edu.java.bot.service;
 
-import edu.java.bot.dto.Link;
-import java.util.List;
+import edu.java.bot.dto.request.LinkUpdate;
 
 public interface LinkNotificationService {
 
-    void notifyLinkUpdate(Link link, List<Long> chatIds);
+    void notifyLinkUpdate(LinkUpdate link);
 
 }

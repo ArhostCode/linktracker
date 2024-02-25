@@ -1,6 +1,5 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.dto.Link;
 import edu.java.bot.dto.request.LinkUpdate;
 import edu.java.bot.service.LinkNotificationService;
 import jakarta.validation.Valid;
@@ -19,10 +18,7 @@ public class LinkUpdatesController {
 
     @PostMapping
     public void handleUpdates(@RequestBody @Valid LinkUpdate linkUpdate) {
-        linkNotificationService.notifyLinkUpdate(
-            new Link(linkUpdate.id(), linkUpdate.url(), linkUpdate.description()),
-            linkUpdate.tgChatIds()
-        );
+        linkNotificationService.notifyLinkUpdate(linkUpdate);
     }
 
 }

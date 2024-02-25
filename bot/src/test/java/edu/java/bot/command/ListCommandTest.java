@@ -1,9 +1,10 @@
 package edu.java.bot.command;
 
 import edu.java.bot.Utils;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
+import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
 import edu.java.bot.commands.ListCommand;
-import edu.java.bot.dto.Link;
-import edu.java.bot.dto.response.ListLinksResponse;
+import edu.java.bot.dto.OptionalAnswer;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.net.URI;
@@ -21,7 +22,7 @@ public class ListCommandTest {
     public void handleShouldReturnEmptyListMessageWhenListIsEmpty() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.listLinks(Mockito.anyLong()))
-            .thenReturn(new ListLinksResponse(List.of()));
+            .thenReturn(OptionalAnswer.of(new ListLinksResponse(List.of(), 0)));
         ListCommand command = new ListCommand(
             createMockTextResolver(),
             mockBotService
@@ -37,10 +38,10 @@ public class ListCommandTest {
     public void handleShouldReturnListMessageWhenListIsNotEmpty() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.listLinks(Mockito.anyLong()))
-            .thenReturn(new ListLinksResponse(List.of(
-                new Link(1L, URI.create("http://localhost.ru"), ""),
-                new Link(2L, URI.create("http://localhost2.ru"), "")
-            )));
+            .thenReturn(OptionalAnswer.of(new ListLinksResponse(List.of(
+                new LinkResponse(1L, URI.create("http://localhost.ru")),
+                new LinkResponse(2L, URI.create("http://localhost2.ru"))
+            ), 2)));
         ListCommand command = new ListCommand(
             createMockTextResolver(),
             mockBotService

@@ -6,10 +6,11 @@ import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.Utils;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
+import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
 import edu.java.bot.commands.UntrackCommand;
-import edu.java.bot.dto.Link;
-import edu.java.bot.dto.response.ListLinksResponse;
-import edu.java.bot.dto.response.RemoveLinkFromTrackingResponse;
+import edu.java.bot.dto.OptionalAnswer;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.net.URI;
@@ -27,7 +28,7 @@ public class UntrackCommandTest {
     public void handleShouldCreateMessageEmptyWhenListIsEmpty() {
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.listLinks(Mockito.anyLong()))
-            .thenReturn(new ListLinksResponse(Collections.emptyList()));
+            .thenReturn(OptionalAnswer.of(new ListLinksResponse(Collections.emptyList(), 0)));
         UntrackCommand command = new UntrackCommand(
             createMockTextResolver(),
             botService
@@ -42,7 +43,10 @@ public class UntrackCommandTest {
     public void handleShouldCreateMessage() {
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.listLinks(Mockito.anyLong()))
-            .thenReturn(new ListLinksResponse(List.of(new Link(1L, URI.create("http://localhost.ru"), ""))));
+            .thenReturn(OptionalAnswer.of(new ListLinksResponse(List.of(new LinkResponse(
+                1L,
+                URI.create("http://localhost.ru")
+            )), 1)));
         UntrackCommand command = new UntrackCommand(
             createMockTextResolver(),
             botService
@@ -59,10 +63,10 @@ public class UntrackCommandTest {
     @DisplayName("Тестирование метода UntrackCommand#handle с callback")
     @Test
     public void handleShouldProcessCallback() {
-        Link link = new Link(1L, URI.create("http://localhost.ru"), "test");
+        LinkResponse link = new LinkResponse(1L, URI.create("http://localhost.ru"));
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
-            .thenReturn(new RemoveLinkFromTrackingResponse(true, ""));
+            .thenReturn(OptionalAnswer.of(new LinkResponse(1L, URI.create("http://localhost.ru"))));
         UntrackCommand command = new UntrackCommand(
             createMockTextResolver(),
             botService
@@ -76,10 +80,13 @@ public class UntrackCommandTest {
     @DisplayName("Тестирование метода UntrackCommand#handle с callback с ошибкой")
     @Test
     public void handleShouldReturnErrorWhenServiceError() {
-        Link link = new Link(1L, URI.create("http://localhost.ru"), "test");
+        LinkResponse link = new LinkResponse(1L, URI.create("http://localhost.ru"));
         BotService botService = Mockito.mock(BotService.class);
         Mockito.when(botService.unlinkUrlFromUser(Mockito.any(), Mockito.anyLong()))
-            .thenReturn(new RemoveLinkFromTrackingResponse(false, ""));
+            .thenReturn(OptionalAnswer.error(ApiErrorResponse.builder()
+                .description("Error")
+                .build())
+            );
         UntrackCommand command = new UntrackCommand(
             createMockTextResolver(),
             botService
@@ -103,7 +110,7 @@ public class UntrackCommandTest {
         return textResolver;
     }
 
-    private Update createMockUpdate(Link untrackLink) {
+    private Update createMockUpdate(LinkResponse untrackLink) {
         Update update = Mockito.mock(Update.class);
         CallbackQuery callbackQuery = Mockito.mock(CallbackQuery.class);
         User user = Mockito.mock(User.class);
