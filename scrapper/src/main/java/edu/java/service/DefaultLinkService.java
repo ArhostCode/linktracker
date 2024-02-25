@@ -4,7 +4,6 @@ import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
 import java.net.URI;
 import java.util.List;
-import edu.java.exception.ChatNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 

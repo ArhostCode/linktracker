@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 public class DefaultLinkNotificationService implements LinkNotificationService {
     @Override
     public void notifyLinkUpdate(LinkUpdate link) {
-        link.tgChatIds().forEach(chatId -> {
-            log.info("{} handle update {} link", chatId, link);
-        });
+        link.tgChatIds().forEach(chatId -> log.info("{} handle update {} link", chatId, link));
     }
 }

@@ -1,6 +1,5 @@
 package edu.java.service;
 
-import edu.java.exception.ChatNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
