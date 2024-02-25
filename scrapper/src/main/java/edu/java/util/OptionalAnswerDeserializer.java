@@ -1,4 +1,4 @@
-package edu.java.bot.dto;
+package edu.java.util;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import edu.java.bot.dto.response.ApiErrorResponse;
+import edu.java.dto.OptionalAnswer;
+import edu.java.dto.response.ApiErrorResponse;
 import java.io.IOException;
 import lombok.extern.log4j.Log4j2;
 

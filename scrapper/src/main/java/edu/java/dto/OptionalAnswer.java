@@ -1,8 +1,8 @@
-package edu.java.bot.dto;
+package edu.java.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import edu.java.bot.dto.response.ApiErrorResponse;
-import edu.java.bot.util.OptionalAnswerDeserializer;
+import edu.java.dto.response.ApiErrorResponse;
+import edu.java.util.OptionalAnswerDeserializer;
 import java.util.function.Consumer;
 
 @JsonDeserialize(using = OptionalAnswerDeserializer.class)
