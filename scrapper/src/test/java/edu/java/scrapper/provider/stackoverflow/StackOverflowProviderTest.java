@@ -12,6 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static edu.java.scrapper.provider.Utils.readAll;
 
 public class StackOverflowProviderTest {
     private static WireMockServer server;
@@ -23,19 +24,7 @@ public class StackOverflowProviderTest {
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                      "items": [
-                        {
-                          "last_activity_date": 1705410153,
-                          "creation_date": 1256799465,
-                          "last_edit_date": 1680185464,
-                          "question_id": 100,
-                          "link": "https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c",
-                          "title": "What is the &#39;--&gt;&#39; operator in C/C++?"
-                        }
-                      ]
-                    }""")));
+                .withBody(readAll("/stackoverflow-mock-answer.json"))));
         server.stubFor(get(urlPathMatching("/questions/101.*"))
             .willReturn(aResponse()
                 .withStatus(404)));
