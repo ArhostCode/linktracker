@@ -10,5 +10,5 @@ public interface LinkService {
 
     LinkResponse addLink(URI link, Long tgChatId);
 
-    LinkResponse removeLink(URI link, Long tgChatId);
+    LinkResponse removeLink(Long id, Long tgChatId);
 }

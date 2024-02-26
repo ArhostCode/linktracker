@@ -64,7 +64,7 @@ public class TrackCommand extends AbstractCommand {
             chatId,
             textResolver.resolve(
                 "command.track.invalid_request",
-                Map.of("link", link)
+                Map.of("id", link)
             )
         );
     }

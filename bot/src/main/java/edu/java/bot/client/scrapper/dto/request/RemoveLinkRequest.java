@@ -1,9 +1,8 @@
 package edu.java.bot.client.scrapper.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import java.net.URI;
 
 public record RemoveLinkRequest(
-    @NotNull URI link
+    @NotNull Long id
 ) {
 }

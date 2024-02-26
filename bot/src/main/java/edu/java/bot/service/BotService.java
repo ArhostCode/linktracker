@@ -6,7 +6,7 @@ import edu.java.bot.dto.OptionalAnswer;
 
 public interface BotService {
 
-    void registerUser(String name, Long id);
+    void registerUser(Long id);
 
     OptionalAnswer<LinkResponse> linkUrlToUser(String url, Long userId);
 

@@ -19,13 +19,13 @@ public class DefaultLinkService implements LinkService {
 
     @Override
     public LinkResponse addLink(URI link, Long tgChatId) {
-        log.info("Adding link {} for chat {}", link, tgChatId);
+        log.info("Adding id {} for chat {}", link, tgChatId);
         return new LinkResponse(1L, link);
     }
 
     @Override
-    public LinkResponse removeLink(URI link, Long tgChatId) {
-        log.info("Removing link {} for chat {}", link, tgChatId);
-        return new LinkResponse(1L, link);
+    public LinkResponse removeLink(Long id, Long tgChatId) {
+        log.info("Removing id {} for chat {}", id, tgChatId);
+        return new LinkResponse(id, URI.create("http://localhost"));
     }
 }

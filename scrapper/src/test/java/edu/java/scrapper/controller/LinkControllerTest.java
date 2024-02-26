@@ -2,13 +2,13 @@ package edu.java.scrapper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.controller.LinkController;
-import edu.java.exception.ChatNotFoundException;
-import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.dto.request.AddLinkRequest;
 import edu.java.dto.request.RemoveLinkRequest;
 import edu.java.dto.response.ApiErrorResponse;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.exception.ChatNotFoundException;
+import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.service.LinkService;
 import java.net.URI;
 import java.util.List;
@@ -144,10 +144,10 @@ public class LinkControllerTest {
             MockMvcRequestBuilders
                 .delete("/links")
                 .contentType("application/json")
-                .content(objectMapper.writeValueAsString(new RemoveLinkRequest(URI.create("http://localhost"))))
+                .content(objectMapper.writeValueAsString(new RemoveLinkRequest(1L)))
                 .header("Tg-Chat-Id", 1L)
         ).andExpect(status().isOk());
 
-        Mockito.verify(linkService).removeLink(URI.create("http://localhost"), 1L);
+        Mockito.verify(linkService).removeLink(1L, 1L);
     }
 }

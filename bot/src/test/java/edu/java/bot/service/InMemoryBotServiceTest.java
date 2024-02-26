@@ -11,7 +11,7 @@ public class InMemoryBotServiceTest {
     @Test
     public void registerUserShouldRegisterUser() {
         InMemoryBotService service = new InMemoryBotService();
-        service.registerUser("user", 123L);
+        service.registerUser(123L);
         Assertions.assertThat(service.listLinks(123L).answer().links()).hasSize(0);
     }
 
@@ -32,7 +32,7 @@ public class InMemoryBotServiceTest {
     @Test
     public void unlinkUrlFromUserShouldUnlinkUrlFromUser() {
         InMemoryBotService service = new InMemoryBotService();
-        service.linkUrlToUser("link", 123L);
+        service.linkUrlToUser("id", 123L);
         Long linkId = service.listLinks(123L).answer().links().getFirst().id();
         service.unlinkUrlFromUser(linkId, 123L);
         Assertions.assertThat(service.listLinks(123L).answer().links())

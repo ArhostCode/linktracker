@@ -40,6 +40,6 @@ public class LinkController {
         @RequestHeader(name = "Tg-Chat-Id") Long tgChatId,
         @RequestBody @Valid RemoveLinkRequest addLinkRequest
     ) {
-        return linkService.removeLink(addLinkRequest.link(), tgChatId);
+        return linkService.removeLink(addLinkRequest.id(), tgChatId);
     }
 }
