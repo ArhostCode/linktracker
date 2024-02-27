@@ -1,7 +1,6 @@
 package edu.java.scrapper.provider.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import java.net.URL;
@@ -13,6 +12,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static edu.java.scrapper.provider.Utils.readAll;
 
 public class GithubInformationProviderTest {
 
@@ -25,16 +25,7 @@ public class GithubInformationProviderTest {
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
-                .withBody("""
-                    {
-                      "id": 753034583,
-                      "full_name": "ArhostCode/linktracker",
-                      "created_at": "2024-02-05T10:42:09Z",
-                      "updated_at": "2024-02-05T10:45:31Z",
-                      "pushed_at": "2024-02-12T20:42:03Z",
-                      "language": "Java",
-                      "description": "🛠️ Проект Tinkoff Java Course 2 семестр"
-                    }""")));
+                .withBody(readAll("/github-mock-answer.json"))));
         server.stubFor(get(urlPathMatching("/repos/jij/hih"))
             .willReturn(aResponse()
                 .withStatus(404)));
