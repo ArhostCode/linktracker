@@ -25,6 +25,7 @@ public class ClientConfiguration {
     public BotClient botClient() {
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
+            .defaultHeader("Content-Type", "application/json")
             .baseUrl(botUrl).build();
 
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/updates")
+@RequestMapping(value = "/updates", consumes = "application/json")
 @RequiredArgsConstructor
 public class LinkUpdatesController {
 
@@ -20,5 +20,4 @@ public class LinkUpdatesController {
     public void handleUpdates(@RequestBody @Valid LinkUpdate linkUpdate) {
         linkNotificationService.notifyLinkUpdate(linkUpdate);
     }
-
 }

@@ -26,6 +26,6 @@ public class DefaultLinkService implements LinkService {
     @Override
     public LinkResponse removeLink(Long id, Long tgChatId) {
         log.info("Removing id {} for chat {}", id, tgChatId);
-        return new LinkResponse(id, URI.create("http://localhost"));
+        return new LinkResponse(id, URI.create("http://localhost2"));
     }
 }

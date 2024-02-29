@@ -21,6 +21,7 @@ public class ScrapperClientConfiguration {
     public ScrapperClient scrapperClient() {
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
+            .defaultHeader("Content-Type", "application/json")
             .baseUrl(scrapperUrl).build();
 
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory

@@ -44,6 +44,7 @@ public class LinkControllerTest {
             MockMvcRequestBuilders
                 .get("/links")
                 .header("Tg-Chat-Id", 1L)
+                .contentType("application/json")
         ).andExpect(status().isOk()).andExpect(
             result -> Assertions.assertThat(result.getResponse().getContentAsString())
                 .isEqualTo("{\"links\":[{\"id\":1,\"url\":\"http://localhost\"}],\"size\":1}")
@@ -59,6 +60,7 @@ public class LinkControllerTest {
         var result = mockMvc.perform(
             MockMvcRequestBuilders
                 .get("/links")
+                .contentType("application/json")
                 .header("Tg-Chat-Id", 1L)
         ).andExpect(status().isNotFound()).andReturn();
 
@@ -74,6 +76,7 @@ public class LinkControllerTest {
         var result = mockMvc.perform(
             MockMvcRequestBuilders
                 .get("/links")
+                .contentType("application/json")
         ).andExpect(status().isBadRequest()).andReturn();
 
         ApiErrorResponse error =
