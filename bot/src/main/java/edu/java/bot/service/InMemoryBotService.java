@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.springframework.stereotype.Service;
 
 // Test Service Implementation
-@Service
+//@Service
 public class InMemoryBotService implements BotService {
 
     private final Map<Long, List<LinkResponse>> usersLinks = new ConcurrentHashMap<>();
