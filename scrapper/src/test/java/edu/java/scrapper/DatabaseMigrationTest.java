@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class DatabaseMigrationTest extends IntegrationTest {
+public class DatabaseMigrationTest extends IntegrationEnvironment {
 
     @SneakyThrows @Test
     public void migrationChatShouldCorrectWork() {
@@ -21,7 +21,6 @@ public class DatabaseMigrationTest extends IntegrationTest {
         Connection connection = POSTGRES.createConnection("");
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM link");
         ResultSet resultSet = statement.executeQuery();
-
         Assertions.assertThat(resultSet.getMetaData().getColumnName(1)).isEqualTo("id");
         Assertions.assertThat(resultSet.getMetaData().getColumnName(2)).isEqualTo("url");
         Assertions.assertThat(resultSet.getMetaData().getColumnName(3)).isEqualTo("description");

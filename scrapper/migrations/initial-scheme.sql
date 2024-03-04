@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS link
     id              BIGINT PRIMARY KEY,
     url             TEXT UNIQUE,
     description     TEXT NOT NULL,
-    updated_at      TIMESTAMP WITH TIME ZONE
+    updated_at      TIMESTAMP WITH TIME ZONE,
+    last_checked_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE IF NOT EXISTS chat_link
