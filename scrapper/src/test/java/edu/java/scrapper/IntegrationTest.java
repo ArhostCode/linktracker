@@ -1,5 +1,6 @@
 package edu.java.scrapper;
 
+import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -38,7 +39,7 @@ public abstract class IntegrationTest {
             new DirectoryResourceAccessor(Path.of("migrations")),
             database
         );
-        liquibase.update();
+        liquibase.update("", new OutputStreamWriter(System.out));
 
     }
 
