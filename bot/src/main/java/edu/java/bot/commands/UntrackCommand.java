@@ -4,12 +4,12 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.response.ListLinksResponse;
-import edu.java.bot.model.response.RemoveLinkFromTrackingResponse;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
+import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
+import edu.java.bot.dto.OptionalAnswer;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
 import java.util.Map;
-import java.util.UUID;
 
 public class UntrackCommand extends AbstractCommand {
     private static final String UNTRACK_DATA_PREFIX = "untrack$";
@@ -47,15 +47,15 @@ public class UntrackCommand extends AbstractCommand {
     private SendMessage processCallbackQuery(Update update) {
         String id = update.callbackQuery().data().substring(UNTRACK_DATA_PREFIX.length());
         long chatId = update.callbackQuery().from().id();
-        RemoveLinkFromTrackingResponse response = botService.unlinkUrlFromUser(UUID.fromString(id), chatId);
-        if (!response.success()) {
+        OptionalAnswer<LinkResponse> response = botService.unlinkUrlFromUser(Long.parseLong(id), chatId);
+        if (response.isError()) {
             return new SendMessage(
                 chatId,
                 textResolver.resolve(
                     "command.untrack.error",
                     Map.of(
                         "request_link", id,
-                        "error_message", response.errorMessage()
+                        "error_message", response.apiErrorResponse().description()
                     )
                 )
             );
@@ -69,14 +69,14 @@ public class UntrackCommand extends AbstractCommand {
     }
 
     private SendMessage processUserCommand(Update update) {
-        ListLinksResponse response = botService.listLinks(update.message().chat().id());
+        ListLinksResponse response = botService.listLinks(update.message().chat().id()).answer();
         if (response.links().isEmpty()) {
             return new SendMessage(update.message().chat().id(), textResolver.resolve("command.untrack.empty"));
         }
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup(
             response.links().stream()
                 .map(link -> new InlineKeyboardButton[] {
-                    new InlineKeyboardButton(link.url()).callbackData(UNTRACK_DATA_PREFIX + link.uuid())})
+                    new InlineKeyboardButton(link.url().toString()).callbackData(UNTRACK_DATA_PREFIX + link.id())})
                 .toList()
                 .toArray(new InlineKeyboardButton[0][0])
         );

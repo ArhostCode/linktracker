@@ -28,7 +28,7 @@ public class StartCommandTest {
         SendMessage message = command.handle(update);
         Assertions.assertThat(message.getParameters().get("text"))
             .isEqualTo("Hello");
-        Mockito.verify(mockBotService, Mockito.times(1)).registerUser("1", 1L);
+        Mockito.verify(mockBotService, Mockito.times(1)).registerUser(1L);
     }
 
     private TextResolver createMockTextResolver() {

@@ -1,6 +1,7 @@
 package edu.java.scrapper.provider.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import java.net.URL;
@@ -35,7 +36,8 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void getInformationShouldReturnCorrectInformation() {
-        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
+        GithubInformationProvider provider =
+            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
         var info = provider.fetchInformation(new URL("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
             .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
@@ -49,7 +51,8 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void getInformationShouldReturnNullWhenRepositoryNotFound() {
-        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
+        GithubInformationProvider provider =
+            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
         var info = provider.fetchInformation(new URL("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
     }
@@ -57,7 +60,8 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
-        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
+        GithubInformationProvider provider =
+            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
         var info = provider.isSupported(new URL("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
     }
@@ -65,7 +69,8 @@ public class GithubInformationProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnFalseIfHostIsInValid() {
-        GithubInformationProvider provider = new GithubInformationProvider(server.baseUrl());
+        GithubInformationProvider provider =
+            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
         var info = provider.isSupported(new URL("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
     }

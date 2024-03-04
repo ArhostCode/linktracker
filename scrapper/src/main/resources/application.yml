@@ -3,6 +3,7 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
+  github-token: ${GITHUB_TOKEN}
 
 provider:
   github:
@@ -14,8 +15,15 @@ spring:
   application:
     name: scrapper
 
+bot:
+  url: http://localhost:8090
+
 server:
   port: 8080
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

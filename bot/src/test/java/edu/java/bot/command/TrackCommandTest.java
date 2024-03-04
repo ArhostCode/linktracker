@@ -1,10 +1,13 @@
 package edu.java.bot.command;
 
 import edu.java.bot.Utils;
+import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.commands.TrackCommand;
-import edu.java.bot.model.response.AddLinkToTrackingResponse;
+import edu.java.bot.dto.OptionalAnswer;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.service.BotService;
 import edu.java.bot.util.TextResolver;
+import java.net.URI;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ public class TrackCommandTest {
     public void handleShouldTrackLink() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.linkUrlToUser(Mockito.anyString(), Mockito.anyLong()))
-            .thenReturn(new AddLinkToTrackingResponse(true, null));
+            .thenReturn(OptionalAnswer.of(new LinkResponse(1L, URI.create("https://flame.ardyc.ru/generate"))));
         TrackCommand command = new TrackCommand(
             createMockTextResolver(),
             mockBotService
@@ -34,7 +37,7 @@ public class TrackCommandTest {
     public void handleShouldReturnErrorWhenServerError() {
         BotService mockBotService = Mockito.mock(BotService.class);
         Mockito.when(mockBotService.linkUrlToUser(Mockito.anyString(), Mockito.anyLong()))
-            .thenReturn(new AddLinkToTrackingResponse(false, "null"));
+            .thenReturn(OptionalAnswer.error(ApiErrorResponse.builder().description("Error").build()));
         TrackCommand command = new TrackCommand(
             createMockTextResolver(),
             mockBotService
