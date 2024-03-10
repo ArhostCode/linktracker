@@ -1,5 +1,6 @@
-package edu.java.scrapper;
+package edu.java.scrapper.database;
 
+import edu.java.scrapper.IntegrationEnvironment;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
