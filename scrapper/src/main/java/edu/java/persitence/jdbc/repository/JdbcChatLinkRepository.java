@@ -6,23 +6,26 @@ import edu.java.persitence.common.repository.TgChatLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class JdbcChatLinkRepository implements TgChatLinkRepository {
 
     private final JdbcClient client;
 
     @Override
-
     public void add(long chatId, long linkId) {
-        client.sql("INSERT INTO chat_link(chat_id, link_id) VALUES (?, ?) ON CONFLICT DO NOTHING")
-            .params(List.of(chatId, linkId));
+        client.sql("INSERT INTO chat_link(chat_id, link_id) VALUES (?, ?)")
+            .params(List.of(chatId, linkId))
+            .update();
     }
 
     @Override
     public void remove(long chatId, long linkId) {
         client.sql("DELETE FROM chat_link WHERE chat_id = ? AND link_id = ?")
-            .params(List.of(chatId, linkId));
+            .params(List.of(chatId, linkId))
+            .update();
     }
 
     @Override
@@ -62,3 +65,6 @@ public class JdbcChatLinkRepository implements TgChatLinkRepository {
             .update();
     }
 }
+
+
+

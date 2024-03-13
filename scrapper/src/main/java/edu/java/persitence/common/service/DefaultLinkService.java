@@ -2,20 +2,30 @@ package edu.java.persitence.common.service;
 
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.persitence.common.dto.Link;
+import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.LinkRepository;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
+import edu.java.provider.InformationProviders;
+import edu.java.provider.api.InformationProvider;
+import edu.java.provider.api.LinkInformation;
 import edu.java.service.LinkService;
 import java.net.URI;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class AbstractLinkService implements LinkService {
+@Service
+public class DefaultLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
     private final TgChatLinkRepository tgChatLinkRepository;
+    private final InformationProviders informationProviders;
 
     @Override
     @Transactional
@@ -30,7 +40,17 @@ public class AbstractLinkService implements LinkService {
     @Override
     @Transactional
     public LinkResponse addLink(URI link, Long tgChatId) {
-        var id = linkRepository.add(Link.create(link.toString(), "", OffsetDateTime.MIN, OffsetDateTime.MAX));
+        InformationProvider provider = informationProviders.getProvider(link.getHost());
+        if (provider == null || !provider.isSupported(link)) {
+            throw new LinkIsNotSupportedException(link);
+        }
+        LinkInformation linkInformation = provider.fetchInformation(link);
+        var id = linkRepository.add(Link.create(
+            link.toString(),
+            linkInformation.title(),
+            linkInformation.lastModified(),
+            OffsetDateTime.now()
+        ));
         tgChatLinkRepository.add(tgChatId, id);
         return new LinkResponse(id, link);
     }
@@ -44,5 +64,20 @@ public class AbstractLinkService implements LinkService {
             linkRepository.remove(id);
         }
         return new LinkResponse(link.getId(), URI.create(link.getUrl()));
+    }
+
+    @Override
+    public List<Link> listOldLinks(Duration after, int limit) {
+        return linkRepository.findOldLinks(after, limit);
+    }
+
+    @Override
+    public void update(long id, OffsetDateTime lastModified) {
+        linkRepository.update(id, lastModified);
+    }
+
+    @Override
+    public List<TgChat> getLinkSubscribers(long linkId) {
+        return tgChatLinkRepository.findAllByLinkId(linkId);
     }
 }

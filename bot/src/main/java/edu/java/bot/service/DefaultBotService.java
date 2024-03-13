@@ -17,8 +17,8 @@ public class DefaultBotService implements BotService {
     private final ScrapperClient scrapperClient;
 
     @Override
-    public void registerUser(Long id) {
-        scrapperClient.registerChat(id);
+    public OptionalAnswer<Void> registerUser(Long id) {
+        return scrapperClient.registerChat(id);
     }
 
     @Override

@@ -2,6 +2,8 @@ package edu.java.persitence.jdbc.repository;
 
 import edu.java.persitence.common.dto.Link;
 import edu.java.persitence.common.repository.LinkRepository;
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -20,14 +22,21 @@ public class JdbcLinkRepository implements LinkRepository {
             .list();
     }
 
+    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     @Override
     public Long add(Link link) {
         return client.sql("""
-                        INSERT INTO
-                          link(url, description, updated_at, last_checked_at)
-                        VALUES
-                          (?, ?, ?, ?) ON CONFLICT DO NOTHING RETURNING id""")
-            .params(List.of(link.getUrl(), link.getDescription(), link.getUpdatedAt(), link.getLastCheckedAt()))
+                INSERT INTO
+                  link(url, description, updated_at, last_checked_at)
+                VALUES
+                  (:link, :description, :updated_at, :last_checked_at)
+                ON CONFLICT (url)
+                DO UPDATE SET updated_at = :updated_at, last_checked_at = :last_checked_at
+                RETURNING id""")
+            .param("link", link.getUrl())
+            .param("description", link.getDescription())
+            .param("updated_at", link.getUpdatedAt())
+            .param("last_checked_at", link.getLastCheckedAt())
             .query(Long.class)
             .single();
     }
@@ -54,5 +63,33 @@ public class JdbcLinkRepository implements LinkRepository {
             .param("url", url)
             .query(Link.class)
             .single();
+    }
+
+    @Override
+    public List<Link> findOldLinks(Duration after, int limit) {
+        return client.sql("""
+                        SELECT
+                          *
+                        FROM
+                          link
+                        WHERE
+                          last_checked_at < :last_checked_at
+                        ORDER BY last_checked_at
+                        LIMIT :limit
+                        """
+            )
+            .param("last_checked_at", OffsetDateTime.now().minus(after))
+            .param("limit", limit)
+            .query(Link.class)
+            .list();
+    }
+
+    @Override
+    public void update(long id, OffsetDateTime lastModified) {
+        client.sql("UPDATE link SET last_checked_at = :last_checked_at, updated_at = :updated_at WHERE id = :id")
+            .param("last_checked_at", OffsetDateTime.now())
+            .param("updated_at", lastModified)
+            .param("id", id)
+            .update();
     }
 }

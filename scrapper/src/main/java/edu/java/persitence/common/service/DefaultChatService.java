@@ -1,14 +1,17 @@
 package edu.java.persitence.common.service;
 
+import edu.java.exception.ChatAlreadyRegisteredException;
 import edu.java.persitence.common.repository.LinkRepository;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import edu.java.persitence.common.repository.TgChatRepository;
 import edu.java.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class AbstractChatService implements ChatService {
+@Service
+public class DefaultChatService implements ChatService {
 
     private final TgChatRepository tgChatRepository;
     private final TgChatLinkRepository tgChatLinkRepository;
@@ -17,6 +20,9 @@ public class AbstractChatService implements ChatService {
     @Override
     @Transactional
     public void registerChat(Long chatId) {
+        if (tgChatRepository.existsByChatId(chatId)) {
+            throw new ChatAlreadyRegisteredException(chatId);
+        }
         tgChatRepository.add(chatId);
     }
 

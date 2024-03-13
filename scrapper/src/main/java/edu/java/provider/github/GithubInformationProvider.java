@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.WebClientInformationProvider;
-import java.net.URL;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +35,17 @@ public class GithubInformationProvider extends WebClientInformationProvider {
     }
 
     @Override
-    public boolean isSupported(URL url) {
+    public boolean isSupported(URI url) {
         return REPOSITORY_PATTERN.matcher(url.toString()).matches();
     }
 
     @Override
     public String getType() {
-        return "github";
+        return "github.com";
     }
 
     @Override
-    public LinkInformation fetchInformation(URL url) {
+    public LinkInformation fetchInformation(URI url) {
         if (!isSupported(url)) {
             return null;
         }
@@ -63,7 +63,7 @@ public class GithubInformationProvider extends WebClientInformationProvider {
     private record GithubRepoInfoResponse(
         @JsonProperty("full_name")
         String fullName,
-        @JsonProperty("updated_at")
+        @JsonProperty("pushed_at")
         OffsetDateTime lastModified,
         String description
     ) {

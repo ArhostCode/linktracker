@@ -1,14 +1,39 @@
 package edu.java.bot.service;
 
+import com.pengrad.telegrambot.model.LinkPreviewOptions;
+import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.dto.request.LinkUpdate;
+import edu.java.bot.executor.RequestExecutor;
+import edu.java.bot.util.TextResolver;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
+@RequiredArgsConstructor
 public class DefaultLinkNotificationService implements LinkNotificationService {
+
+    private final RequestExecutor requestExecutor;
+    private final TextResolver textResolver;
+
     @Override
     public void notifyLinkUpdate(LinkUpdate link) {
-        link.tgChatIds().forEach(chatId -> log.info("{} handle update {} id", chatId, link));
+        link.tgChatIds().forEach(chatId -> {
+            requestExecutor.execute(
+                new SendMessage(
+                    chatId,
+                    textResolver.resolve(
+                        "link.update",
+                        Map.of(
+                            "link", link.url().toString(),
+                            "description", link.description()
+                        )
+                    )
+                ).disableWebPagePreview(true)
+                    .linkPreviewOptions(new LinkPreviewOptions().isDisabled(true))
+            );
+        });
     }
 }

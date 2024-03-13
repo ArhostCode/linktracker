@@ -11,4 +11,6 @@ public interface TgChatRepository {
 
     void remove(long chatId);
 
+    boolean existsByChatId(long chatId);
+
 }

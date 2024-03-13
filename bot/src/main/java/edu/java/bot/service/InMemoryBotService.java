@@ -16,8 +16,9 @@ public class InMemoryBotService implements BotService {
     private final Map<Long, List<LinkResponse>> usersLinks = new ConcurrentHashMap<>();
 
     @Override
-    public void registerUser(Long id) {
+    public OptionalAnswer<Void> registerUser(Long id) {
         usersLinks.put(id, new ArrayList<>());
+        return OptionalAnswer.of(null);
     }
 
     @Override
