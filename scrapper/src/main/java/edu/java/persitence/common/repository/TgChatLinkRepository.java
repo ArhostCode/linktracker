@@ -15,4 +15,6 @@ public interface TgChatLinkRepository {
     List<TgChat> findAllByLinkId(long linkId);
 
     void removeAllByChatId(Long chatId);
+
+    boolean isExists(long chatId, long linkId);
 }

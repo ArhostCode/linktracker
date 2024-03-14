@@ -3,6 +3,7 @@ package edu.java.persitence.common.service;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
 import edu.java.exception.LinkIsNotSupportedException;
+import edu.java.exception.LinkNotFoundException;
 import edu.java.persitence.common.dto.Link;
 import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.LinkRepository;
@@ -15,12 +16,11 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Service
 public class DefaultLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
@@ -45,6 +45,9 @@ public class DefaultLinkService implements LinkService {
             throw new LinkIsNotSupportedException(link);
         }
         LinkInformation linkInformation = provider.fetchInformation(link);
+        if (linkInformation == null) {
+            throw new LinkIsNotSupportedException(link);
+        }
         var id = linkRepository.add(Link.create(
             link.toString(),
             linkInformation.title(),
@@ -58,21 +61,29 @@ public class DefaultLinkService implements LinkService {
     @Override
     @Transactional
     public LinkResponse removeLink(Long id, Long tgChatId) {
-        Link link = linkRepository.findById(id);
-        tgChatLinkRepository.remove(tgChatId, id);
-        if (tgChatLinkRepository.findAllByLinkId(id).isEmpty()) {
-            linkRepository.remove(id);
+        Optional<Link> optionalLink = linkRepository.findById(id);
+        if (optionalLink.isPresent()) {
+            Link link = optionalLink.get();
+            tgChatLinkRepository.remove(tgChatId, id);
+            if (tgChatLinkRepository.findAllByLinkId(id).isEmpty()) {
+                linkRepository.remove(id);
+            }
+            return new LinkResponse(link.getId(), URI.create(link.getUrl()));
+        } else {
+            throw new LinkNotFoundException(id);
         }
-        return new LinkResponse(link.getId(), URI.create(link.getUrl()));
     }
 
     @Override
     public List<Link> listOldLinks(Duration after, int limit) {
-        return linkRepository.findOldLinks(after, limit);
+        return linkRepository.findLinksCheckedAfter(after, limit);
     }
 
     @Override
     public void update(long id, OffsetDateTime lastModified) {
+        if (linkRepository.findById(id).isEmpty()) {
+            throw new LinkNotFoundException(id);
+        }
         linkRepository.update(id, lastModified);
     }
 

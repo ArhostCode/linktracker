@@ -1,5 +1,6 @@
 package edu.java.scrapper.database;
 
+import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import org.assertj.core.api.Assertions;
@@ -20,8 +21,16 @@ public class JdbcChatTest extends IntegrationEnvironment {
     @Rollback
     void addShouldInsertChatInDatabase() {
         jdbcChatRepository.add(123L);
-        var dbChat = jdbcChatRepository.findAll().get(0);
-        Assertions.assertThat(dbChat.getId()).isEqualTo(123L);
+        Assertions.assertThat(jdbcChatRepository.findAll()).contains(new TgChat(123L));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void removeShouldDeleteChatFromDatabase() {
+        jdbcChatRepository.add(123L);
+        jdbcChatRepository.remove(123L);
+        Assertions.assertThat(jdbcChatRepository.findAll()).doesNotContain(new TgChat(123L));
     }
 
 }

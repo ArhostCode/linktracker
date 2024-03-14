@@ -4,6 +4,7 @@ import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.TgChatRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,7 @@ public class JdbcChatRepository implements TgChatRepository {
     }
 
     @Override
-    public boolean existsByChatId(long chatId) {
+    public boolean isExists(long chatId) {
         return client.sql("SELECT id FROM tg_chat WHERE id = :id").param("id", chatId).query(TgChat.class)
             .optional()
             .isPresent();

@@ -1,16 +1,15 @@
 package edu.java.persitence.common.service;
 
 import edu.java.exception.ChatAlreadyRegisteredException;
+import edu.java.exception.ChatNotFoundException;
 import edu.java.persitence.common.repository.LinkRepository;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import edu.java.persitence.common.repository.TgChatRepository;
 import edu.java.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Service
 public class DefaultChatService implements ChatService {
 
     private final TgChatRepository tgChatRepository;
@@ -20,7 +19,7 @@ public class DefaultChatService implements ChatService {
     @Override
     @Transactional
     public void registerChat(Long chatId) {
-        if (tgChatRepository.existsByChatId(chatId)) {
+        if (tgChatRepository.isExists(chatId)) {
             throw new ChatAlreadyRegisteredException(chatId);
         }
         tgChatRepository.add(chatId);
@@ -29,6 +28,9 @@ public class DefaultChatService implements ChatService {
     @Override
     @Transactional
     public void deleteChat(Long chatId) {
+        if (!tgChatRepository.isExists(chatId)) {
+            throw new ChatNotFoundException(chatId);
+        }
         var links = tgChatLinkRepository.findAllByChatId(chatId);
         tgChatLinkRepository.removeAllByChatId(chatId);
         links.forEach(link -> {

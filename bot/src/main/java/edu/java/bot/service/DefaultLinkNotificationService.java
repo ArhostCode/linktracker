@@ -2,6 +2,8 @@ package edu.java.bot.service;
 
 import com.pengrad.telegrambot.model.LinkPreviewOptions;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
+import edu.java.bot.client.scrapper.ScrapperClient;
 import edu.java.bot.dto.request.LinkUpdate;
 import edu.java.bot.executor.RequestExecutor;
 import edu.java.bot.util.TextResolver;
@@ -16,12 +18,13 @@ import org.springframework.stereotype.Component;
 public class DefaultLinkNotificationService implements LinkNotificationService {
 
     private final RequestExecutor requestExecutor;
+    private final ScrapperClient scrapperClient;
     private final TextResolver textResolver;
 
     @Override
     public void notifyLinkUpdate(LinkUpdate link) {
         link.tgChatIds().forEach(chatId -> {
-            requestExecutor.execute(
+            SendResponse response = requestExecutor.execute(
                 new SendMessage(
                     chatId,
                     textResolver.resolve(
@@ -34,6 +37,9 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
                 ).disableWebPagePreview(true)
                     .linkPreviewOptions(new LinkPreviewOptions().isDisabled(true))
             );
+            if (response.message() == null) {
+                scrapperClient.deleteChat(chatId);
+            }
         });
     }
 }

@@ -6,6 +6,9 @@ app:
     max-links-per-check: 100
   github-token: ${GITHUB_TOKEN}
 
+database:
+  accessor: jdbc
+
 provider:
   github:
     url: https://api.github.com

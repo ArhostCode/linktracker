@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
 import java.net.URI;
-import java.net.URL;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

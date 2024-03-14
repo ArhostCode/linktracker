@@ -4,6 +4,7 @@ import edu.java.persitence.common.dto.Link;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface LinkRepository {
 
@@ -13,11 +14,12 @@ public interface LinkRepository {
 
     Long remove(long linkId);
 
-    Link findById(long linkId);
+    Optional<Link> findById(long linkId);
 
-    Link findByUrl(String url);
+    Optional<Link> findByUrl(String url);
 
-    List<Link> findOldLinks(Duration after, int limit);
+    List<Link> findLinksCheckedAfter(Duration after, int limit);
 
     void update(long id, OffsetDateTime lastModified);
+
 }

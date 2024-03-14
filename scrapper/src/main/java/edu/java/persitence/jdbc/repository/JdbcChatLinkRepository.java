@@ -5,6 +5,7 @@ import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -63,6 +64,16 @@ public class JdbcChatLinkRepository implements TgChatLinkRepository {
         client.sql("DELETE FROM chat_link WHERE chat_id = ?")
             .params(chatId)
             .update();
+    }
+
+    @Override
+    public boolean isExists(long chatId, long linkId) {
+        return client.sql("SELECT id FROM chat_link WHERE chat_id = :chat_id AND link_id = :link_id")
+            .param("chat_id", chatId)
+            .param("link_id", linkId)
+            .query(Long.class)
+            .optional()
+            .isPresent();
     }
 }
 
