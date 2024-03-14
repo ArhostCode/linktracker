@@ -38,7 +38,7 @@ public class JdbcLinkTest extends IntegrationEnvironment {
         jdbcLinkRepository.add(link);
         var dbLink = jdbcLinkRepository.findByUrl(link.getUrl());
         jdbcLinkRepository.remove(dbLink.get().getId());
-        Assertions.assertThatThrownBy(() -> jdbcLinkRepository.findByUrl(link.getUrl()));
+        Assertions.assertThat(jdbcLinkRepository.findByUrl(link.getUrl()).isEmpty()).isTrue();
     }
 
     @Test
@@ -58,7 +58,8 @@ public class JdbcLinkTest extends IntegrationEnvironment {
     @Rollback
     void findLinksCheckedAfterShouldReturnOldLinks() {
         var link = Link.create("google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.now());
-        var link2 = Link.create("yandex.ru", "Yandex", OffsetDateTime.MIN, OffsetDateTime.now().minus(Duration.ofDays(1)));
+        var link2 =
+            Link.create("yandex.ru", "Yandex", OffsetDateTime.MIN, OffsetDateTime.now().minus(Duration.ofDays(1)));
         jdbcLinkRepository.add(link);
         jdbcLinkRepository.add(link2);
         var dbLinks = jdbcLinkRepository.findLinksCheckedAfter(Duration.ofMinutes(10), 100);
