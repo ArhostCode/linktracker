@@ -1,5 +1,6 @@
 package edu.java.scrapper.provider.stackoverflow;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
@@ -34,21 +35,22 @@ public class StackOverflowProviderTest {
     @SneakyThrows
     @Test
     public void getInformationShouldReturnCorrectInformation() {
-        StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
+        StackOverflowInformationProvider provider =
+            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
         var info = provider.fetchInformation(new URI("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info)
-            .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
+            .extracting(LinkInformation::url, LinkInformation::title)
             .contains(
                 new URI("https://stackoverflow.com/questions/100/?hello_world"),
-                "What is the &#39;--&gt;&#39; operator in C/C++?",
-                null
+                "What is the &#39;--&gt;&#39; operator in C/C++?"
             );
     }
 
     @SneakyThrows
     @Test
     public void getInformationShouldReturnNullWhenQuestionNotFound() {
-        StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
+        StackOverflowInformationProvider provider =
+            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
         var info = provider.fetchInformation(new URI("https://stackoverflow.com/questions/101/?hello_world"));
         Assertions.assertThat(info).isNull();
     }
@@ -56,7 +58,8 @@ public class StackOverflowProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
-        StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
+        StackOverflowInformationProvider provider =
+            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
         var info = provider.isSupported(new URI("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info).isTrue();
     }
@@ -64,7 +67,8 @@ public class StackOverflowProviderTest {
     @SneakyThrows
     @Test
     public void isSupportedShouldReturnFalseIfHostIsInValid() {
-        StackOverflowInformationProvider provider = new StackOverflowInformationProvider(server.baseUrl());
+        StackOverflowInformationProvider provider =
+            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
         var info = provider.isSupported(new URI("https://memoryoutofrange.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
     }

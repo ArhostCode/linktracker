@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
@@ -22,7 +23,7 @@ public class GithubInformationProviderTest {
     @BeforeAll
     public static void setUp() {
         server = new WireMockServer(wireMockConfig().dynamicPort());
-        server.stubFor(get(urlPathMatching("/repos/arhostcode/linktracker"))
+        server.stubFor(get(urlPathMatching("/repos/arhostcode/linktracker/events"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
@@ -37,14 +38,17 @@ public class GithubInformationProviderTest {
     @Test
     public void getInformationShouldReturnCorrectInformation() {
         GithubInformationProvider provider =
-            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
+            new GithubInformationProvider(
+                server.baseUrl(),
+                new ApplicationConfig(null, null),
+                Jackson2ObjectMapperBuilder.json().build()
+            );
         var info = provider.fetchInformation(new URI("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
-            .extracting(LinkInformation::url, LinkInformation::title, LinkInformation::description)
+            .extracting(LinkInformation::url, LinkInformation::title)
             .contains(
                 new URI("https://github.com/arhostcode/linktracker"),
-                "ArhostCode/linktracker",
-                "🛠️ Проект Tinkoff Java Course 2 семестр"
+                "arhostcode/linktracker"
             );
     }
 
@@ -52,7 +56,11 @@ public class GithubInformationProviderTest {
     @Test
     public void getInformationShouldReturnNullWhenRepositoryNotFound() {
         GithubInformationProvider provider =
-            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
+            new GithubInformationProvider(
+                server.baseUrl(),
+                new ApplicationConfig(null, null),
+                Jackson2ObjectMapperBuilder.json().build()
+            );
         var info = provider.fetchInformation(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
     }
@@ -61,7 +69,11 @@ public class GithubInformationProviderTest {
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
         GithubInformationProvider provider =
-            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
+            new GithubInformationProvider(
+                server.baseUrl(),
+                new ApplicationConfig(null, null),
+                Jackson2ObjectMapperBuilder.json().build()
+            );
         var info = provider.isSupported(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
     }
@@ -70,7 +82,11 @@ public class GithubInformationProviderTest {
     @Test
     public void isSupportedShouldReturnFalseIfHostIsInValid() {
         GithubInformationProvider provider =
-            new GithubInformationProvider(server.baseUrl(), new ApplicationConfig(null, null));
+            new GithubInformationProvider(
+                server.baseUrl(),
+                new ApplicationConfig(null, null),
+                Jackson2ObjectMapperBuilder.json().build()
+            );
         var info = provider.isSupported(new URI("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
     }

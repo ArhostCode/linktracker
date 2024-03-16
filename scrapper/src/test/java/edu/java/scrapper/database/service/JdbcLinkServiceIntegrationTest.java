@@ -6,7 +6,6 @@ import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatLinkRepository;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;
 import edu.java.provider.InformationProviders;
-import edu.java.provider.api.InformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import edu.java.scrapper.IntegrationEnvironment;
@@ -14,6 +13,7 @@ import edu.java.service.ChatService;
 import edu.java.service.LinkService;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -47,7 +47,7 @@ public class JdbcLinkServiceIntegrationTest extends IntegrationEnvironment {
     void addLinkShouldAddLinkAndCreateIfNotExists() {
         String url = "https://github.com/arhostcode/linktracker";
         Mockito.when(provider.fetchInformation(Mockito.any()))
-            .thenReturn(new LinkInformation(URI.create(url), "github", "github", OffsetDateTime.MAX));
+            .thenReturn(new LinkInformation(URI.create(url), "github", List.of()));
         Mockito.when(provider.isSupported(Mockito.any())).thenReturn(true);
         Mockito.when(providers.getProvider(Mockito.any())).thenReturn(provider);
         chatService.registerChat(123L);

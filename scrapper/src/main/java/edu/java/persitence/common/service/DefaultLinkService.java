@@ -51,7 +51,7 @@ public class DefaultLinkService implements LinkService {
         var id = linkRepository.add(Link.create(
             link.toString(),
             linkInformation.title(),
-            linkInformation.lastModified(),
+            linkInformation.events().getFirst().lastModified(),
             OffsetDateTime.now()
         ));
         tgChatLinkRepository.add(tgChatId, id);
