@@ -18,7 +18,11 @@ import static edu.java.scrapper.provider.Utils.readAll;
 
 public class StackOverflowProviderTest {
     private static WireMockServer server;
-    private static final ApplicationConfig EMPTY_CONFIG = new ApplicationConfig(null, null, null);
+    private static final ApplicationConfig EMPTY_CONFIG = new ApplicationConfig(
+        null,
+        null,
+        new ApplicationConfig.StackOverflowCredentials(null, null)
+    );
 
     @BeforeAll
     public static void setUp() {

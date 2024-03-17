@@ -44,7 +44,7 @@ public class JooqChatLinkRepository implements TgChatLinkRepository {
 
     @Override
     public List<TgChat> findAllByLinkId(long linkId) {
-        return dslContext.select(CHAT_LINK.fields()).from(CHAT_LINK)
+        return dslContext.select(TG_CHAT.fields()).from(CHAT_LINK)
             .join(TG_CHAT)
             .on(CHAT_LINK.CHAT_ID.eq(TG_CHAT.ID))
             .where(CHAT_LINK.LINK_ID.eq(linkId))

@@ -306,6 +306,7 @@
                         <consoleOutput>true</consoleOutput>
                         <logViolationsToConsole>true</logViolationsToConsole>
                         <failsOnError>true</failsOnError>
+                        <excludes>scrapper/src/main/java/domain/jooq/**</excludes>
                     </configuration>
                 </plugin>
             </plugins>

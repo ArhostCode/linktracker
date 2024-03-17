@@ -10,7 +10,7 @@ app:
     access-token: ${STACKOVERFLOW_ACCESS_TOKEN}
 
 database:
-  accessor: jdbc
+  accessor: jooq
 
 provider:
   github:

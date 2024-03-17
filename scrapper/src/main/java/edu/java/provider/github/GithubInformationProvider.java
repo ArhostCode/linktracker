@@ -7,7 +7,6 @@ import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
 import edu.java.provider.github.model.GithubEventInfo;
 import edu.java.provider.github.model.GithubEventsHolder;
-import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;

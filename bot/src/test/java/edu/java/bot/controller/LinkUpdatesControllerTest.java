@@ -43,7 +43,8 @@ public class LinkUpdatesControllerTest {
                       "description": "string",
                       "tgChatIds": [
                         0
-                      ]
+                      ],
+                      "metaInformation": {}
                     }
                     """)
                 .contentType("application/json")
