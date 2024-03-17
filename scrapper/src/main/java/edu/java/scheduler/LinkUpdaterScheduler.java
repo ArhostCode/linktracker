@@ -44,6 +44,8 @@ public class LinkUpdaterScheduler {
                             .map(TgChat::getId)
                             .toList()
                     ));
+                } else {
+                    linkService.checkNow(link.getId());
                 }
             });
         log.info("Update finished");

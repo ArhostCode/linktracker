@@ -22,4 +22,5 @@ public interface LinkRepository {
 
     void update(long id, OffsetDateTime lastModified);
 
+    void checkNow(long id);
 }

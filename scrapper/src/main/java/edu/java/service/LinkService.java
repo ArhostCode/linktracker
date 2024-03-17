@@ -22,4 +22,6 @@ public interface LinkService {
     void update(long id, OffsetDateTime lastModified);
 
     List<TgChat> getLinkSubscribers(long linkId);
+
+    void checkNow(long id);
 }

@@ -91,4 +91,9 @@ public class DefaultLinkService implements LinkService {
     public List<TgChat> getLinkSubscribers(long linkId) {
         return tgChatLinkRepository.findAllByLinkId(linkId);
     }
+
+    @Override
+    public void checkNow(long id) {
+        linkRepository.checkNow(id);
+    }
 }
