@@ -27,13 +27,15 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     public Long add(Link link) {
         return client.sql("""
-                INSERT INTO
-                  link(url, description, updated_at, last_checked_at, meta_information)
-                VALUES
-                  (:link, :description, :updated_at, :last_checked_at, :meta_information)
-                ON CONFLICT (url)
-                DO UPDATE SET updated_at = :updated_at, last_checked_at = :last_checked_at, meta_information = :meta_information
-                RETURNING id""")
+                        INSERT INTO
+                          link(url, description, updated_at, last_checked_at, meta_information)
+                        VALUES
+                          (:link, :description, :updated_at, :last_checked_at, :meta_information)
+                        ON CONFLICT (url)
+                        DO UPDATE SET updated_at = :updated_at,
+                        last_checked_at = :last_checked_at,
+                        meta_information = :meta_information
+                        RETURNING id""")
             .param("link", link.getUrl())
             .param("description", link.getDescription())
             .param("updated_at", link.getUpdatedAt())
