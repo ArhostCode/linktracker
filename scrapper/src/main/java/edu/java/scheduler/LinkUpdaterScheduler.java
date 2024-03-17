@@ -1,7 +1,9 @@
 package edu.java.scheduler;
 
 import edu.java.client.bot.BotClient;
+import edu.java.client.bot.request.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.persitence.common.dto.TgChat;
 import edu.java.provider.InformationProviders;
 import edu.java.provider.api.InformationProvider;
 import edu.java.provider.api.LinkInformation;
@@ -31,19 +33,27 @@ public class LinkUpdaterScheduler {
                 URI uri = URI.create(link.getUrl());
                 InformationProvider provider = informationProviders.getProvider(uri.getHost());
                 LinkInformation linkInformation = provider.fetchInformation(uri);
-                linkInformation = provider.filter(linkInformation, link.getUpdatedAt(), link.getDescription());
-
-//                if (linkInformation.lastModified().isAfter(link.getUpdatedAt())) {
-//                    linkService.update(link.getId(), linkInformation.lastModified());
-//                    botClient.handleUpdates(new LinkUpdate(
-//                        link.getId(),
-//                        uri,
-//                        linkInformation.updateType(),
-//                        linkService.getLinkSubscribers(link.getId()).stream()
-//                            .map(TgChat::getId)
-//                            .toList()
-//                    ));
-//                }
+                linkInformation = provider.filter(linkInformation, link.getUpdatedAt(), link.getMetaInformation());
+                if (linkInformation.events().isEmpty()) {
+                    linkService.checkNow(link.getId());
+                    return;
+                }
+                linkService.update(
+                    link.getId(),
+                    linkInformation.events().getFirst().lastModified(),
+                    linkInformation.currentContext()
+                );
+                var subscribers = linkService.getLinkSubscribers(link.getId()).stream()
+                    .map(TgChat::getId)
+                    .toList();
+                linkInformation.events().reversed()
+                    .forEach(event -> botClient.handleUpdates(new LinkUpdate(
+                        link.getId(),
+                        uri,
+                        event.type(),
+                        subscribers,
+                        event.additionalData()
+                    )));
             });
         log.info("Update finished");
     }

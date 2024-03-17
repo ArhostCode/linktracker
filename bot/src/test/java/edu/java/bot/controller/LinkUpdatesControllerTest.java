@@ -6,6 +6,7 @@ import edu.java.bot.dto.response.ApiErrorResponse;
 import edu.java.bot.service.LinkNotificationService;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class LinkUpdatesControllerTest {
         ).andExpect(status().isOk());
 
         Mockito.verify(linkNotificationService).notifyLinkUpdate(
-            new LinkUpdate(1L, URI.create("https://example.com"), "string", List.of(0L))
+            new LinkUpdate(1L, URI.create("https://example.com"), "string", List.of(0L), Map.of())
         );
     }
 

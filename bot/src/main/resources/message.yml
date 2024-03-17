@@ -27,3 +27,12 @@ command:
     description: "Список всех отслеживаемых сервисов"
 link:
   update: "Обновлена ссылка %link% - %description%"
+github:
+  push_event: "Добавлено %size% коммит (-ов)"
+  issue_comment_event: "Добавлено сообщение в issue/pull_request %title%"
+  issues_event: "Обновлён issue %title%"
+  pull_request_event: "Обновлён pull request %title%"
+  create_event: "Создано %ref% (%ref_type%)"
+stackoverflow:
+  answers_event: "Изменены ответы на вопрос. На данный вопрос ответили %count% раз (-а)"
+  score_event: "Изменен рейтинг вопроса. Новый рейтинг: %score%"

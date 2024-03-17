@@ -19,7 +19,9 @@ public interface LinkService {
 
     List<Link> listOldLinks(Duration after, int limit);
 
-    void update(long id, OffsetDateTime lastModified);
+    void update(long id, OffsetDateTime lastModified, String metaInformation);
 
     List<TgChat> getLinkSubscribers(long linkId);
+
+    void checkNow(long id);
 }

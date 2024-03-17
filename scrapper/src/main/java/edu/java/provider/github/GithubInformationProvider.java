@@ -1,13 +1,10 @@
 package edu.java.provider.github;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
-import edu.java.provider.api.WebClientInformationProvider;
-import edu.java.provider.github.deserializers.GithubEventInfoDeserializer;
-import edu.java.provider.github.deserializers.GithubEventsHolderDeserializer;
 import edu.java.provider.github.model.GithubEventInfo;
 import edu.java.provider.github.model.GithubEventsHolder;
 import jakarta.annotation.PostConstruct;
@@ -18,16 +15,16 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class GithubInformationProvider extends WebClientInformationProvider {
+public class GithubInformationProvider extends EventCollectableInformationProvider<GithubEventInfo> {
 
     private static final Pattern REPOSITORY_PATTERN = Pattern.compile("https://github.com/(.+)/(.+)");
     private static final int MAX_PER_UPDATE = 5;
 
+    @SuppressWarnings("checkstyle:MultipleStringLiterals")
     @Autowired
     public GithubInformationProvider(
         @Value("${provider.github.url}") String apiUrl,
@@ -42,6 +39,49 @@ public class GithubInformationProvider extends WebClientInformationProvider {
                 }
             })
             .build()
+        );
+        registerCollector(
+            "PushEvent",
+            item -> new LinkUpdateEvent(
+                "github.push_event",
+                item.lastModified(),
+                Map.of("size", String.valueOf(item.payload().size()))
+            )
+        );
+        registerCollector(
+            "IssueCommentEvent",
+            item -> new LinkUpdateEvent(
+                "github.issue_comment_event",
+                item.lastModified(),
+                Map.of("title", item.payload().issue().title())
+            )
+        );
+        registerCollector(
+            "IssuesEvent",
+            item -> new LinkUpdateEvent(
+                "github.issues_event",
+                item.lastModified(),
+                Map.of("title", item.payload().issue().title())
+            )
+        );
+        registerCollector(
+            "PullRequestEvent",
+            item -> new LinkUpdateEvent(
+                "github.pull_request_event",
+                item.lastModified(),
+                Map.of("title", item.payload().pullRequest().title())
+            )
+        );
+        registerCollector(
+            "CreateEvent",
+            item -> new LinkUpdateEvent(
+                "github.create_event",
+                item.lastModified(),
+                Map.of(
+                    "ref", String.valueOf(item.payload().ref()),
+                    "ref_type", String.valueOf(item.payload().refType())
+                )
+            )
         );
     }
 
@@ -76,9 +116,17 @@ public class GithubInformationProvider extends WebClientInformationProvider {
         return new LinkInformation(
             url,
             info.events().getFirst().repo().name(),
-            info.events().stream()
-                .map(event -> new LinkUpdateEvent(event.type(), event.lastModified(), event.additionalData()))
-                .toList()
+            info.events().stream().map(it -> {
+                var collector = getCollector(it.type());
+                if (collector == null) {
+                    return new LinkUpdateEvent(
+                        "github." + it.type().toLowerCase(),
+                        it.lastModified(),
+                        Map.of("type", it.type())
+                    );
+                }
+                return getCollector(it.type()).apply(it);
+            }).toList()
         );
     }
 
@@ -91,10 +139,5 @@ public class GithubInformationProvider extends WebClientInformationProvider {
             info.title(),
             realUpdates
         );
-    }
-
-    @PostConstruct
-    public void test() {
-        System.out.println(fetchInformation(URI.create("https://github.com/arhostcode/linktracker")));
     }
 }

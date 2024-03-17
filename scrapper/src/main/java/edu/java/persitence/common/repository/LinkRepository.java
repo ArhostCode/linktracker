@@ -20,6 +20,7 @@ public interface LinkRepository {
 
     List<Link> findLinksCheckedAfter(Duration after, int limit);
 
-    void update(long id, OffsetDateTime lastModified);
+    void update(long id, OffsetDateTime lastModified, String metaInformation);
 
+    void checkNow(long id);
 }

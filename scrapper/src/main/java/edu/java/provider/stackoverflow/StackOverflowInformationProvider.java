@@ -2,9 +2,9 @@ package edu.java.provider.stackoverflow;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
-import edu.java.provider.api.WebClientInformationProvider;
 import edu.java.provider.stackoverflow.model.StackOverflowItem;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.SneakyThrows;
@@ -21,11 +20,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StackOverflowInformationProvider extends WebClientInformationProvider {
+public class StackOverflowInformationProvider extends EventCollectableInformationProvider<StackOverflowItem> {
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow.com/questions/(\\d+).*");
     private static final TypeReference<HashMap<String, String>> STRING_HASHMAP = new TypeReference<>() {
     };
-    private final List<Function<StackOverflowItem, LinkUpdateEvent>> linkUpdateEventsCollector = new ArrayList<>();
     private final ObjectMapper mapper;
 
     @Autowired
@@ -36,15 +34,17 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
         super(apiUrl);
         this.mapper = mapper;
         registerCollector(
+            "AnswerEvent",
             item -> new LinkUpdateEvent(
-                "stackoverflow.answersevent",
+                "stackoverflow.answers_event",
                 item.lastModified(),
                 Map.of("count", String.valueOf(item.answersCount()))
             )
         );
         registerCollector(
+            "ScoreEvent",
             item -> new LinkUpdateEvent(
-                "stackoverflow.scoreevent",
+                "stackoverflow.score_event",
                 item.lastModified(),
                 Map.of("score", String.valueOf(item.score()))
             )
@@ -83,7 +83,10 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
         return new LinkInformation(
             url,
             info.items()[0].title(),
-            linkUpdateEventsCollector.stream().map(it -> it.apply(info.items()[0])).toList()
+            getLinkUpdateEventsCollector().values().stream()
+                .map(stackOverflowItemLinkUpdateEventFunction ->
+                    stackOverflowItemLinkUpdateEventFunction.apply(info.items()[0]))
+                .toList()
         );
     }
 
@@ -91,7 +94,7 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     @Override
     public LinkInformation filter(LinkInformation info, OffsetDateTime after, String optionalContext) {
         Map<String, String> optionalData = new HashMap<>();
-        if (!optionalContext.isEmpty()) {
+        if (optionalContext != null && !optionalContext.isEmpty()) {
             optionalData = mapper.readValue(optionalContext, STRING_HASHMAP);
         }
         List<LinkUpdateEvent> realEvents = new ArrayList<>();
@@ -115,10 +118,6 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
             }
         }
         return new LinkInformation(info.url(), info.title(), realEvents, mapper.writeValueAsString(optionalData));
-    }
-
-    public void registerCollector(Function<StackOverflowItem, LinkUpdateEvent> collector) {
-        linkUpdateEventsCollector.add(collector);
     }
 
     private record StackOverflowInfoResponse(StackOverflowItem[] items) {

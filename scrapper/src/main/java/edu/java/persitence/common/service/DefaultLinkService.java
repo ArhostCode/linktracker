@@ -2,6 +2,7 @@ package edu.java.persitence.common.service;
 
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.exception.LinkAlreadyAddedException;
 import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.exception.LinkNotFoundException;
 import edu.java.persitence.common.dto.Link;
@@ -40,6 +41,9 @@ public class DefaultLinkService implements LinkService {
     @Override
     @Transactional
     public LinkResponse addLink(URI link, Long tgChatId) {
+        if (linkRepository.findByUrl(link.toString()).isPresent()) {
+            throw new LinkAlreadyAddedException(link);
+        }
         InformationProvider provider = informationProviders.getProvider(link.getHost());
         if (provider == null || !provider.isSupported(link)) {
             throw new LinkIsNotSupportedException(link);
@@ -48,10 +52,14 @@ public class DefaultLinkService implements LinkService {
         if (linkInformation == null) {
             throw new LinkIsNotSupportedException(link);
         }
+        OffsetDateTime lastModified = OffsetDateTime.now();
+        if (!linkInformation.events().isEmpty()) {
+            lastModified = linkInformation.events().getFirst().lastModified();
+        }
         var id = linkRepository.add(Link.create(
             link.toString(),
             linkInformation.title(),
-            linkInformation.events().getFirst().lastModified(),
+            lastModified,
             OffsetDateTime.now()
         ));
         tgChatLinkRepository.add(tgChatId, id);
@@ -80,15 +88,20 @@ public class DefaultLinkService implements LinkService {
     }
 
     @Override
-    public void update(long id, OffsetDateTime lastModified) {
+    public void update(long id, OffsetDateTime lastModified, String metaInformation) {
         if (linkRepository.findById(id).isEmpty()) {
             throw new LinkNotFoundException(id);
         }
-        linkRepository.update(id, lastModified);
+        linkRepository.update(id, lastModified, metaInformation);
     }
 
     @Override
     public List<TgChat> getLinkSubscribers(long linkId) {
         return tgChatLinkRepository.findAllByLinkId(linkId);
+    }
+
+    @Override
+    public void checkNow(long id) {
+        linkRepository.checkNow(id);
     }
 }

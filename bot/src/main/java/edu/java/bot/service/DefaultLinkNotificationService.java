@@ -30,8 +30,14 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
                     textResolver.resolve(
                         "link.update",
                         Map.of(
-                            "link", link.url().toString(),
-                            "description", link.description()
+                            "link",
+                            link.url().toString(),
+                            "description",
+                            textResolver.resolve(
+                                link.description(),
+                                link.metaInformation(),
+                                "Общее обновление информации"
+                            )
                         )
                     )
                 ).disableWebPagePreview(true)
@@ -42,4 +48,9 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
             }
         });
     }
+
+    private String resolve(String template, Map<String, String> args) {
+        return textResolver.resolve(template, args);
+    }
+
 }

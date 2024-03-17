@@ -2,6 +2,55 @@
     {
         "id": "36565448370",
         "type": "PushEvent",
+        "repo": {
+            "id": 753034583,
+            "name": "arhostcode/linktracker",
+            "url": "https://api.github.com/repos/arhostcode/linktracker"
+        },
+        "payload": {
+            "repository_id": 753034583,
+            "push_id": 17550268809,
+            "size": 1,
+            "distinct_size": 1,
+            "ref": "refs/heads/hw5",
+            "head": "708f1e4a6021af2c04a6c71e0ffbfd1658e6ca2f",
+            "before": "0254801593b669ba7c0c52ff01d9283f5866a6a5",
+            "commits": [
+                {
+                    "sha": "708f1e4a6021af2c04a6c71e0ffbfd1658e6ca2f",
+                    "author": {
+                        "email": "e-gulyakin@mail.ru",
+                        "name": "ArhostCode"
+                    },
+                    "message": "Fix issues",
+                    "distinct": true,
+                    "url": "https://api.github.com/repos/arhostcode/linktracker/commits/708f1e4a6021af2c04a6c71e0ffbfd1658e6ca2f"
+                }
+            ]
+        },
+        "public": true,
+        "created_at": "2024-03-14T20:40:26Z"
+    },
+    {
+        "id": "36565356973",
+        "type": "IssueCommentEvent",
+        "repo": {
+            "id": 753034583,
+            "name": "arhostcode/linktracker",
+            "url": "https://api.github.com/repos/arhostcode/linktracker"
+        },
+        "payload": {
+            "action": "created",
+            "issue": {
+                "title": "Домашняя работа №5"
+            }
+        },
+        "public": true,
+        "created_at": "2024-03-14T20:36:33Z"
+    },
+    {
+        "id": "36565339122",
+        "type": "PullRequestEvent",
         "actor": {
             "id": 42569377,
             "login": "arhostcode",
@@ -15,26 +64,14 @@
             "name": "arhostcode/linktracker",
             "url": "https://api.github.com/repos/arhostcode/linktracker"
         },
-        "public": true,
-        "created_at": "2024-03-14T20:40:26Z"
-    },
-    {
-        "id": "36565356973",
-        "type": "IssueCommentEvent",
-        "actor": {
-            "id": 41898282,
-            "login": "github-actions[bot]",
-            "display_login": "github-actions",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/github-actions[bot]",
-            "avatar_url": "https://avatars.githubusercontent.com/u/41898282?"
-        },
-        "repo": {
-            "id": 753034583,
-            "name": "arhostcode/linktracker",
-            "url": "https://api.github.com/repos/arhostcode/linktracker"
+        "payload": {
+            "action": "opened",
+            "number": 5,
+            "pull_request": {
+                "title": "Домашняя работа №5"
+            }
         },
         "public": true,
-        "created_at": "2024-03-14T20:36:33Z"
+        "created_at": "2024-03-14T20:35:49Z"
     }
 ]
