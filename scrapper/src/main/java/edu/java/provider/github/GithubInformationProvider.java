@@ -1,6 +1,5 @@
 package edu.java.provider.github;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
@@ -21,14 +20,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class GithubInformationProvider extends EventCollectableInformationProvider<GithubEventInfo> {
 
     private static final Pattern REPOSITORY_PATTERN = Pattern.compile("https://github.com/(.+)/(.+)");
-    private static final int MAX_PER_UPDATE = 5;
+    private static final int MAX_PER_UPDATE = 10;
 
     @SuppressWarnings("checkstyle:MultipleStringLiterals")
     @Autowired
     public GithubInformationProvider(
         @Value("${provider.github.url}") String apiUrl,
-        ApplicationConfig config,
-        ObjectMapper mapper
+        ApplicationConfig config
     ) {
         super(WebClient.builder()
             .baseUrl(apiUrl)
@@ -114,7 +112,7 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
         }
         return new LinkInformation(
             url,
-            info.events().getFirst().repo().name(),
+            !info.events().isEmpty() ? info.events().getFirst().repo().name() : "",
             info.events().stream().map(it -> {
                 var collector = getCollector(it.type());
                 if (collector == null) {

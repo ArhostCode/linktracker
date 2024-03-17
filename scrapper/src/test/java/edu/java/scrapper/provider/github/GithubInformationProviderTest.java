@@ -41,8 +41,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG,
-                Jackson2ObjectMapperBuilder.json().build()
+                EMPTY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
@@ -59,8 +58,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG,
-                Jackson2ObjectMapperBuilder.json().build()
+                EMPTY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
@@ -72,8 +70,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG,
-                Jackson2ObjectMapperBuilder.json().build()
+                EMPTY_CONFIG
             );
         var info = provider.isSupported(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
@@ -85,8 +82,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG,
-                Jackson2ObjectMapperBuilder.json().build()
+                EMPTY_CONFIG
             );
         var info = provider.isSupported(new URI("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
