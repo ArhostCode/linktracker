@@ -2,6 +2,7 @@ package edu.java.scrapper.provider.stackoverflow;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
 import java.net.URI;
@@ -17,6 +18,7 @@ import static edu.java.scrapper.provider.Utils.readAll;
 
 public class StackOverflowProviderTest {
     private static WireMockServer server;
+    private static final ApplicationConfig EMPTY_CONFIG = new ApplicationConfig(null, null, null);
 
     @BeforeAll
     public static void setUp() {
@@ -36,7 +38,11 @@ public class StackOverflowProviderTest {
     @Test
     public void getInformationShouldReturnCorrectInformation() {
         StackOverflowInformationProvider provider =
-            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
+            new StackOverflowInformationProvider(
+                server.baseUrl(),
+                EMPTY_CONFIG,
+                new ObjectMapper()
+            );
         var info = provider.fetchInformation(new URI("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info)
             .extracting(LinkInformation::url, LinkInformation::title)
@@ -50,7 +56,11 @@ public class StackOverflowProviderTest {
     @Test
     public void getInformationShouldReturnNullWhenQuestionNotFound() {
         StackOverflowInformationProvider provider =
-            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
+            new StackOverflowInformationProvider(
+                server.baseUrl(),
+                EMPTY_CONFIG,
+                new ObjectMapper()
+            );
         var info = provider.fetchInformation(new URI("https://stackoverflow.com/questions/101/?hello_world"));
         Assertions.assertThat(info).isNull();
     }
@@ -59,7 +69,11 @@ public class StackOverflowProviderTest {
     @Test
     public void isSupportedShouldReturnTrueIfHostIsValid() {
         StackOverflowInformationProvider provider =
-            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
+            new StackOverflowInformationProvider(
+                server.baseUrl(),
+                EMPTY_CONFIG,
+                new ObjectMapper()
+            );
         var info = provider.isSupported(new URI("https://stackoverflow.com/questions/100/?hello_world"));
         Assertions.assertThat(info).isTrue();
     }
@@ -68,7 +82,11 @@ public class StackOverflowProviderTest {
     @Test
     public void isSupportedShouldReturnFalseIfHostIsInValid() {
         StackOverflowInformationProvider provider =
-            new StackOverflowInformationProvider(server.baseUrl(), new ObjectMapper());
+            new StackOverflowInformationProvider(
+                server.baseUrl(),
+                EMPTY_CONFIG,
+                new ObjectMapper()
+            );
         var info = provider.isSupported(new URI("https://memoryoutofrange.com/jij/hih"));
         Assertions.assertThat(info).isFalse();
     }

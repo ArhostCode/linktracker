@@ -2,6 +2,7 @@ package edu.java.provider.stackoverflow;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
@@ -24,11 +25,13 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow.com/questions/(\\d+).*");
     private static final TypeReference<HashMap<String, String>> STRING_HASHMAP = new TypeReference<>() {
     };
+    private final String authorizationQueryParam;
     private final ObjectMapper mapper;
 
     @Autowired
     public StackOverflowInformationProvider(
         @Value("${provider.stackoverflow.url}") String apiUrl,
+        ApplicationConfig config,
         ObjectMapper mapper
     ) {
         super(apiUrl);
@@ -49,10 +52,16 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
                 Map.of("score", String.valueOf(item.score()))
             )
         );
+        if (config.stackOverflow().accessToken() != null && !config.stackOverflow().accessToken().isBlank()) {
+            authorizationQueryParam =
+                "access_token=" + config.stackOverflow().accessToken() + "&" + "key=" + config.stackOverflow().key();
+        } else {
+            authorizationQueryParam = "";
+        }
     }
 
     public StackOverflowInformationProvider() {
-        this("https://api.stackexchange.com/2.3", new ObjectMapper());
+        this("https://api.stackexchange.com/2.3", new ApplicationConfig(null, null, null), new ObjectMapper());
     }
 
     @Override
@@ -65,6 +74,7 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
         return "stackoverflow.com";
     }
 
+    @SneakyThrows
     @Override
     public LinkInformation fetchInformation(URI url) {
         Matcher matcher = QUESTION_PATTERN.matcher(url.toString());
@@ -73,29 +83,35 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
         }
         var questionId = matcher.group(1);
         var info = executeRequest(
-            "/questions/" + questionId + "?site=stackoverflow",
+            "/questions/" + questionId + "?site=stackoverflow" + "&" + authorizationQueryParam,
             StackOverflowInfoResponse.class,
             StackOverflowInfoResponse.EMPTY
         );
         if (info == null || info.equals(StackOverflowInfoResponse.EMPTY) || info.items.length == 0) {
             return null;
         }
+        List<LinkUpdateEvent> events = getLinkUpdateEventsCollector().values().stream()
+            .map(stackOverflowItemLinkUpdateEventFunction ->
+                stackOverflowItemLinkUpdateEventFunction.apply(info.items()[0]))
+            .toList();
+        HashMap<String, String> metaInformation = new HashMap<>();
+        for (LinkUpdateEvent event : events) {
+            metaInformation.putAll(event.additionalData());
+        }
         return new LinkInformation(
             url,
             info.items()[0].title(),
-            getLinkUpdateEventsCollector().values().stream()
-                .map(stackOverflowItemLinkUpdateEventFunction ->
-                    stackOverflowItemLinkUpdateEventFunction.apply(info.items()[0]))
-                .toList()
+            events,
+            mapper.writeValueAsString(metaInformation)
         );
     }
 
     @SneakyThrows
     @Override
-    public LinkInformation filter(LinkInformation info, OffsetDateTime after, String optionalContext) {
+    public LinkInformation filter(LinkInformation info, OffsetDateTime after, String optionalMetaInfo) {
         Map<String, String> optionalData = new HashMap<>();
-        if (optionalContext != null && !optionalContext.isEmpty()) {
-            optionalData = mapper.readValue(optionalContext, STRING_HASHMAP);
+        if (optionalMetaInfo != null && !optionalMetaInfo.isEmpty()) {
+            optionalData = mapper.readValue(optionalMetaInfo, STRING_HASHMAP);
         }
         List<LinkUpdateEvent> realEvents = new ArrayList<>();
         List<LinkUpdateEvent> filteredEvents =

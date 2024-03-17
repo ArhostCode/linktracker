@@ -19,6 +19,7 @@ import static edu.java.scrapper.provider.Utils.readAll;
 public class GithubInformationProviderTest {
 
     private static WireMockServer server;
+    private static final ApplicationConfig EMPTY_CONFIG = new ApplicationConfig(null, null, null);
 
     @BeforeAll
     public static void setUp() {
@@ -40,7 +41,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                new ApplicationConfig(null, null),
+                EMPTY_CONFIG,
                 Jackson2ObjectMapperBuilder.json().build()
             );
         var info = provider.fetchInformation(new URI("https://github.com/arhostcode/linktracker"));
@@ -58,7 +59,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                new ApplicationConfig(null, null),
+                EMPTY_CONFIG,
                 Jackson2ObjectMapperBuilder.json().build()
             );
         var info = provider.fetchInformation(new URI("https://github.com/jij/hih"));
@@ -71,7 +72,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                new ApplicationConfig(null, null),
+                EMPTY_CONFIG,
                 Jackson2ObjectMapperBuilder.json().build()
             );
         var info = provider.isSupported(new URI("https://github.com/jij/hih"));
@@ -84,7 +85,7 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                new ApplicationConfig(null, null),
+                EMPTY_CONFIG,
                 Jackson2ObjectMapperBuilder.json().build()
             );
         var info = provider.isSupported(new URI("https://gitlab.com/jij/hih"));

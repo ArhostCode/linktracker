@@ -41,7 +41,7 @@ public class LinkUpdaterScheduler {
                 linkService.update(
                     link.getId(),
                     linkInformation.events().getFirst().lastModified(),
-                    linkInformation.currentContext()
+                    linkInformation.metaInformation()
                 );
                 var subscribers = linkService.getLinkSubscribers(link.getId()).stream()
                     .map(TgChat::getId)

@@ -108,12 +108,4 @@ public class JdbcLinkRepository implements LinkRepository {
             .param("id", id)
             .update();
     }
-
-    @Override
-    public void checkNow(long id) {
-        client.sql("UPDATE link SET last_checked_at = :last_checked_at WHERE id = :id")
-            .param("last_checked_at", OffsetDateTime.now())
-            .param("id", id)
-            .update();
-    }
 }

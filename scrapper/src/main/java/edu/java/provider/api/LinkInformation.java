@@ -7,7 +7,7 @@ public record LinkInformation(
     URI url,
     String title,
     List<LinkUpdateEvent> events,
-    String currentContext
+    String metaInformation
 ) {
 
     public LinkInformation(URI url, String title, List<LinkUpdateEvent> events) {

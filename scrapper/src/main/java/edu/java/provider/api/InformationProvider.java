@@ -13,7 +13,7 @@ public interface InformationProvider {
 
     LinkInformation fetchInformation(URI url);
 
-    LinkInformation filter(LinkInformation info, OffsetDateTime after, String optionalContext);
+    LinkInformation filter(LinkInformation info, OffsetDateTime after, String optionalMetaInfo);
 
     default LinkInformation filter(LinkInformation info, OffsetDateTime after) {
         return filter(info, after, null);

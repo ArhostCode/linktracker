@@ -60,7 +60,8 @@ public class DefaultLinkService implements LinkService {
             link.toString(),
             linkInformation.title(),
             lastModified,
-            OffsetDateTime.now()
+            OffsetDateTime.now(),
+            linkInformation.metaInformation()
         ));
         tgChatLinkRepository.add(tgChatId, id);
         return new LinkResponse(id, link);

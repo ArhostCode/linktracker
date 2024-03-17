@@ -5,6 +5,9 @@ app:
     force-check-delay: 1m
     max-links-per-check: 100
   github-token: ${GITHUB_TOKEN}
+  stackoverflow:
+    key: ${STACKOVERFLOW_KEY}
+    access-token: ${STACKOVERFLOW_ACCESS_TOKEN}
 
 database:
   accessor: jdbc
