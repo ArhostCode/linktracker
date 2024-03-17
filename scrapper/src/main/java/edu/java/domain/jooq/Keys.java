@@ -5,11 +5,9 @@ package edu.java.domain.jooq;
 
 
 import edu.java.domain.jooq.tables.ChatLink;
-import edu.java.domain.jooq.tables.Databasechangeloglock;
 import edu.java.domain.jooq.tables.Link;
 import edu.java.domain.jooq.tables.TgChat;
 import edu.java.domain.jooq.tables.records.ChatLinkRecord;
-import edu.java.domain.jooq.tables.records.DatabasechangeloglockRecord;
 import edu.java.domain.jooq.tables.records.LinkRecord;
 import edu.java.domain.jooq.tables.records.TgChatRecord;
 
@@ -41,7 +39,6 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<ChatLinkRecord> CHAT_LINK_PKEY = Internal.createUniqueKey(ChatLink.CHAT_LINK, DSL.name("chat_link_pkey"), new TableField[] { ChatLink.CHAT_LINK.CHAT_ID, ChatLink.CHAT_LINK.LINK_ID }, true);
-    public static final UniqueKey<DatabasechangeloglockRecord> DATABASECHANGELOGLOCK_PKEY = Internal.createUniqueKey(Databasechangeloglock.DATABASECHANGELOGLOCK, DSL.name("databasechangeloglock_pkey"), new TableField[] { Databasechangeloglock.DATABASECHANGELOGLOCK.ID }, true);
     public static final UniqueKey<LinkRecord> LINK_PKEY = Internal.createUniqueKey(Link.LINK, DSL.name("link_pkey"), new TableField[] { Link.LINK.ID }, true);
     public static final UniqueKey<LinkRecord> LINK_URL_KEY = Internal.createUniqueKey(Link.LINK, DSL.name("link_url_key"), new TableField[] { Link.LINK.URL }, true);
     public static final UniqueKey<TgChatRecord> TG_CHAT_PKEY = Internal.createUniqueKey(TgChat.TG_CHAT, DSL.name("tg_chat_pkey"), new TableField[] { TgChat.TG_CHAT.ID }, true);

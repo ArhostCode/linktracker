@@ -50,7 +50,7 @@ public class JooqCodegen {
         Database database = new Database()
             .withName("org.jooq.meta.postgres.PostgresDatabase")
             .withIncludes(".*")
-            .withExcludes("")
+            .withExcludes("databasechangelog|databasechangeloglock")
             .withInputSchema("public");
 
         Generate options = new Generate()

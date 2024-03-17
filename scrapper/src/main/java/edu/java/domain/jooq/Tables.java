@@ -5,8 +5,6 @@ package edu.java.domain.jooq;
 
 
 import edu.java.domain.jooq.tables.ChatLink;
-import edu.java.domain.jooq.tables.Databasechangelog;
-import edu.java.domain.jooq.tables.Databasechangeloglock;
 import edu.java.domain.jooq.tables.Link;
 import edu.java.domain.jooq.tables.TgChat;
 
@@ -30,16 +28,6 @@ public class Tables {
      * The table <code>public.chat_link</code>.
      */
     public static final ChatLink CHAT_LINK = ChatLink.CHAT_LINK;
-
-    /**
-     * The table <code>public.databasechangelog</code>.
-     */
-    public static final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
-
-    /**
-     * The table <code>public.databasechangeloglock</code>.
-     */
-    public static final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 
     /**
      * The table <code>public.link</code>.
