@@ -84,11 +84,13 @@ public class DefaultLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public List<Link> listOldLinks(Duration after, int limit) {
         return linkRepository.findLinksCheckedAfter(after, limit);
     }
 
     @Override
+    @Transactional
     public void update(long id, OffsetDateTime lastModified, String metaInformation) {
         if (linkRepository.findById(id).isEmpty()) {
             throw new LinkNotFoundException(id);
@@ -97,11 +99,13 @@ public class DefaultLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public List<TgChat> getLinkSubscribers(long linkId) {
         return tgChatLinkRepository.findAllByLinkId(linkId);
     }
 
     @Override
+    @Transactional
     public void checkNow(long id) {
         linkRepository.checkNow(id);
     }
