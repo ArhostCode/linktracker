@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,6 +35,9 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
     @Autowired
     private JdbcClient client;
 
+    @Autowired
+    private EntityManager manager;
+
     @MockBean
     private InformationProviders informationProviders;
 
@@ -53,6 +57,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
         client.sql("INSERT INTO tg_chat (id) VALUES (5)").update();
 
         linkService.addLink(URI.create("https://example.com"), 5L);
+        manager.flush();
         Assertions.assertThat(client.sql("SELECT COUNT(*) FROM link WHERE url = 'https://example.com'")
                 .query(Long.class).single())
             .isEqualTo(1L);
@@ -71,7 +76,8 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
                 .query(Long.class)
                 .single();
         client.sql("INSERT INTO chat_link (chat_id, link_id) VALUES (5, ?)").params(linkId).update();
-        linkService.removeLink(1L, 5L);
+        linkService.removeLink(linkId, 5L);
+        manager.flush();
         Assertions.assertThat(client.sql("SELECT COUNT(*) FROM link WHERE url = 'https://example.com'")
                 .query(Long.class).single())
             .isEqualTo(0L);
@@ -89,6 +95,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
                 .query(Long.class)
                 .single();
         linkService.update(linkId, OffsetDateTime.now(), "new meta");
+        manager.flush();
         Assertions.assertThat(client.sql("SELECT meta_information FROM link WHERE id = ?").params(linkId)
                 .query(String.class)
                 .single())
@@ -128,6 +135,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
         var linkId = client.sql("INSERT INTO link (url, description) VALUES ('https://example.com', '') RETURNING id")
             .query(Long.class).single();
         linkService.checkNow(linkId);
+        manager.flush();
         Assertions.assertThat(client.sql("SELECT * FROM link WHERE id = ?").params(linkId)
                 .query(Link.class).single().getLastCheckedAt().withOffsetSameInstant(ZoneOffset.ofHours(3)))
             .isEqualToIgnoringHours(OffsetDateTime.now(ZoneOffset.ofHours(3)));
