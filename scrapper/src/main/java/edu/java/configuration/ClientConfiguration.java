@@ -1,6 +1,8 @@
 package edu.java.configuration;
 
 import edu.java.client.bot.BotClient;
+import edu.java.util.retry.RetryFilterCreator;
+import edu.java.util.retry.RetryPolicy;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +24,11 @@ public class ClientConfiguration {
     private String botUrl;
 
     @Bean
-    public BotClient botClient() {
+    public BotClient botClient(RetryPolicy policy) {
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
             .defaultHeader("Content-Type", "application/json")
+            .filter(RetryFilterCreator.create(policy))
             .baseUrl(botUrl).build();
 
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory
@@ -33,4 +36,5 @@ public class ClientConfiguration {
             .build();
         return httpServiceProxyFactory.createClient(BotClient.class);
     }
+
 }

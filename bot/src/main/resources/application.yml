@@ -16,3 +16,8 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+retry:
+  type: fixed
+  max-attempts: 5
+  min-min_delay: 10s

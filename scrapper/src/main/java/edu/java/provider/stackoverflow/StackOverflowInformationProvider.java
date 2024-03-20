@@ -3,6 +3,7 @@ package edu.java.provider.stackoverflow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.util.retry.RetryPolicy;
 import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
@@ -32,9 +33,10 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
     public StackOverflowInformationProvider(
         @Value("${provider.stackoverflow.url}") String apiUrl,
         ApplicationConfig config,
-        ObjectMapper mapper
+        ObjectMapper mapper,
+        RetryPolicy retryPolicy
     ) {
-        super(apiUrl);
+        super(apiUrl, retryPolicy);
         this.mapper = mapper;
         registerCollector(
             "AnswerEvent",

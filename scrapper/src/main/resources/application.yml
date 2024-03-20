@@ -39,3 +39,10 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+retry:
+  type: linear
+  max-attempts: 5
+  min-delay: 5s
+  codes: 404, 500, 502
+  max-delay: 50s
