@@ -28,7 +28,6 @@ public class DefaultLinkService implements LinkService {
     private final InformationProviders informationProviders;
 
     @Override
-    @Transactional
     public ListLinksResponse listLinks(Long tgChatId) {
         var links = tgChatLinkRepository.findAllByChatId(tgChatId);
         var linkResponses = links.stream()

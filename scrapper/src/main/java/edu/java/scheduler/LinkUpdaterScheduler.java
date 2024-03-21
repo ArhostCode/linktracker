@@ -3,6 +3,7 @@ package edu.java.scheduler;
 import edu.java.client.bot.BotClient;
 import edu.java.client.bot.request.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.persitence.common.dto.Link;
 import edu.java.persitence.common.dto.TgChat;
 import edu.java.provider.InformationProviders;
 import edu.java.provider.api.InformationProvider;
@@ -33,22 +34,25 @@ public class LinkUpdaterScheduler {
                 URI uri = URI.create(link.getUrl());
                 InformationProvider provider = informationProviders.getProvider(uri.getHost());
                 LinkInformation linkInformation = provider.fetchInformation(uri);
-
-                if (linkInformation.lastModified().isAfter(link.getUpdatedAt())) {
-                    linkService.update(link.getId(), linkInformation.lastModified());
-                    botClient.handleUpdates(new LinkUpdate(
-                        link.getId(),
-                        uri,
-                        linkInformation.title(),
-                        linkService.getLinkSubscribers(link.getId()).stream()
-                            .map(TgChat::getId)
-                            .toList()
-                    ));
-                } else {
-                    linkService.checkNow(link.getId());
-                }
+                processLinkInformation(linkInformation, link);
             });
         log.info("Update finished");
+    }
+
+    private void processLinkInformation(LinkInformation linkInformation, Link link) {
+        if (linkInformation.lastModified().isAfter(link.getUpdatedAt())) {
+            linkService.update(link.getId(), linkInformation.lastModified());
+            botClient.handleUpdates(new LinkUpdate(
+                link.getId(),
+                URI.create(link.getUrl()),
+                linkInformation.title(),
+                linkService.getLinkSubscribers(link.getId()).stream()
+                    .map(TgChat::getId)
+                    .toList()
+            ));
+        } else {
+            linkService.checkNow(link.getId());
+        }
     }
 
 }
