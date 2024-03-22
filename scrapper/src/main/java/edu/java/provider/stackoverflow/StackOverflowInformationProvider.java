@@ -3,7 +3,7 @@ package edu.java.provider.stackoverflow;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.WebClientInformationProvider;
-import java.net.URL;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,17 +27,17 @@ public class StackOverflowInformationProvider extends WebClientInformationProvid
     }
 
     @Override
-    public boolean isSupported(URL url) {
+    public boolean isSupported(URI url) {
         return QUESTION_PATTERN.matcher(url.toString()).matches();
     }
 
     @Override
     public String getType() {
-        return "stackoverflow";
+        return "stackoverflow.com";
     }
 
     @Override
-    public LinkInformation fetchInformation(URL url) {
+    public LinkInformation fetchInformation(URI url) {
         Matcher matcher = QUESTION_PATTERN.matcher(url.toString());
         if (!matcher.matches()) {
             return null;

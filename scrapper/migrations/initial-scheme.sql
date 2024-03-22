@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS tg_chat
 
 CREATE TABLE IF NOT EXISTS link
 (
-    id              BIGINT PRIMARY KEY,
+    id              BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     url             TEXT UNIQUE,
     description     TEXT NOT NULL,
     updated_at      TIMESTAMP WITH TIME ZONE,

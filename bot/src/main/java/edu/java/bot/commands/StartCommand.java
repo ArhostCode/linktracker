@@ -27,7 +27,16 @@ public class StartCommand extends AbstractCommand {
 
     @Override
     public SendMessage handle(Update update) {
-        botService.registerUser(update.message().chat().id());
+        var answer = botService.registerUser(update.message().chat().id());
+        if (answer != null && answer.isError()) {
+            return new SendMessage(
+                update.message().chat().id(),
+                textResolver.resolve(
+                    "command.start.error",
+                    Map.of("error", answer.apiErrorResponse().description())
+                )
+            );
+        }
         return new SendMessage(
             update.message().chat().id(),
             textResolver.resolve(

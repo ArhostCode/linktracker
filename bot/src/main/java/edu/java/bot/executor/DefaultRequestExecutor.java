@@ -13,10 +13,10 @@ public class DefaultRequestExecutor implements RequestExecutor {
     private final TelegramBot telegramBot;
 
     @Override
-    public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
+    public <T extends BaseRequest<T, R>, R extends BaseResponse> R execute(BaseRequest<T, R> request) {
         if (telegramBot == null) {
             throw new IllegalStateException("Telegram bot is not working");
         }
-        telegramBot.execute(request);
+        return telegramBot.execute(request);
     }
 }

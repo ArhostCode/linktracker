@@ -3,7 +3,11 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
+    max-links-per-check: 100
   github-token: ${GITHUB_TOKEN}
+
+database:
+  accessor: jdbc
 
 provider:
   github:
@@ -14,6 +18,12 @@ provider:
 spring:
   application:
     name: scrapper
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
 
 bot:
   url: http://localhost:8090
