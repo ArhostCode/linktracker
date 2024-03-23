@@ -34,28 +34,32 @@ public class LinkUpdaterScheduler {
                 InformationProvider provider = informationProviders.getProvider(uri.getHost());
                 LinkInformation linkInformation = provider.fetchInformation(uri);
                 linkInformation = provider.filter(linkInformation, link.getUpdatedAt(), link.getMetaInformation());
-                if (linkInformation.events().isEmpty()) {
-                    linkService.checkNow(link.getId());
-                    return;
-                }
-                linkService.update(
-                    link.getId(),
-                    linkInformation.events().getFirst().lastModified(),
-                    linkInformation.metaInformation()
-                );
-                var subscribers = linkService.getLinkSubscribers(link.getId()).stream()
-                    .map(TgChat::getId)
-                    .toList();
-                linkInformation.events().reversed()
-                    .forEach(event -> botClient.handleUpdates(new LinkUpdate(
+                processLinkInformation(linkInformation, link);
+            });
+        log.info("Update finished");
+    }
+
+    private void processLinkInformation(LinkInformation linkInformation, Link link) {
+        if (linkInformation.events().isEmpty()) {
+            linkService.checkNow(link.getId());
+            return;
+        }
+        linkService.update(
+                link.getId(),
+                linkInformation.events().getFirst().lastModified(),
+                linkInformation.metaInformation()
+        );
+        var subscribers = linkService.getLinkSubscribers(link.getId()).stream()
+                .map(TgChat::getId)
+                .toList();
+        linkInformation.events().reversed()
+                .forEach(event -> botClient.handleUpdates(new LinkUpdate(
                         link.getId(),
                         uri,
                         event.type(),
                         subscribers,
                         event.additionalData()
-                    )));
-            });
-        log.info("Update finished");
+                )));
     }
 
 }
