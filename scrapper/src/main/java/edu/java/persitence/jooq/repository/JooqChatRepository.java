@@ -1,6 +1,6 @@
 package edu.java.persitence.jooq.repository;
 
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.common.repository.TgChatRepository;
 import java.util.List;
 import org.jooq.DSLContext;

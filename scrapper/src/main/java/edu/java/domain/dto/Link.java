@@ -1,4 +1,4 @@
-package edu.java.persitence.common.dto;
+package edu.java.domain.dto;
 
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;

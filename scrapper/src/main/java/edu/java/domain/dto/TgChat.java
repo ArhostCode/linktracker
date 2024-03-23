@@ -1,4 +1,4 @@
-package edu.java.persitence.common.dto;
+package edu.java.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

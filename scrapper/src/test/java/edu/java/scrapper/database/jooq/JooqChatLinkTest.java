@@ -1,7 +1,7 @@
 package edu.java.scrapper.database.jooq;
 
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jooq.repository.JooqChatLinkRepository;
 import edu.java.persitence.jooq.repository.JooqChatRepository;
 import edu.java.persitence.jooq.repository.JooqLinkRepository;

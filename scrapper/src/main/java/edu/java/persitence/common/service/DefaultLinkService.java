@@ -1,12 +1,12 @@
 package edu.java.persitence.common.service;
 
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
 import edu.java.exception.LinkAlreadyAddedException;
 import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.exception.LinkNotFoundException;
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.LinkRepository;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import edu.java.provider.InformationProviders;

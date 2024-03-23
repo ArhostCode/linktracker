@@ -1,6 +1,6 @@
 package edu.java.scrapper.database.jooq;
 
-import edu.java.persitence.common.dto.Link;
+import edu.java.domain.dto.Link;
 import edu.java.persitence.jooq.repository.JooqLinkRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.Duration;

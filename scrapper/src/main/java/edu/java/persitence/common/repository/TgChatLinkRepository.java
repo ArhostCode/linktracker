@@ -1,7 +1,7 @@
 package edu.java.persitence.common.repository;
 
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import java.util.List;
 
 public interface TgChatLinkRepository {

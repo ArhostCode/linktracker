@@ -1,8 +1,8 @@
 package edu.java.scrapper.database.service;
 
 import edu.java.exception.LinkNotFoundException;
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatLinkRepository;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;
 import edu.java.provider.InformationProviders;
