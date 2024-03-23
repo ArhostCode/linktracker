@@ -1,6 +1,7 @@
-package edu.java.exception;
+package edu.java.exception.handlers;
 
 import edu.java.dto.response.ApiErrorResponse;
+import edu.java.exception.ScrapperException;
 import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.TypeMismatchException;
