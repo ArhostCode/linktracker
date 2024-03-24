@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
                                 description = "Scrapper API", version = "1.0.0"))
 public class ClientConfiguration {
 
-    @Value("${bot.url:http://localhost:8090}")
+    @Value("${bot.url}")
     private String botUrl;
 
     @Bean
