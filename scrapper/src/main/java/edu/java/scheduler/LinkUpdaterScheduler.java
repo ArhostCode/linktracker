@@ -15,8 +15,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-
-
 @Log4j2
 @Component
 @RequiredArgsConstructor
@@ -31,14 +29,14 @@ public class LinkUpdaterScheduler {
     public void update() {
         log.info("Update started");
         linkService.listOldLinks(appConfig.scheduler().forceCheckDelay(), appConfig.scheduler().maxLinksPerCheck())
-                .forEach(link -> {
-                    log.info("Updating link {}", link);
-                    URI uri = URI.create(link.getUrl());
-                    InformationProvider provider = informationProviders.getProvider(uri.getHost());
-                    LinkInformation linkInformation = provider.fetchInformation(uri);
-                    linkInformation = provider.filter(linkInformation, link.getUpdatedAt(), link.getMetaInformation());
-                    processLinkInformation(linkInformation, link);
-                });
+            .forEach(link -> {
+                log.info("Updating link {}", link);
+                URI uri = URI.create(link.getUrl());
+                InformationProvider provider = informationProviders.getProvider(uri.getHost());
+                LinkInformation linkInformation = provider.fetchInformation(uri);
+                linkInformation = provider.filter(linkInformation, link.getUpdatedAt(), link.getMetaInformation());
+                processLinkInformation(linkInformation, link);
+            });
         log.info("Update finished");
     }
 
@@ -48,21 +46,21 @@ public class LinkUpdaterScheduler {
             return;
         }
         linkService.update(
-                link.getId(),
-                linkInformation.events().getFirst().lastModified(),
-                linkInformation.metaInformation()
+            link.getId(),
+            linkInformation.events().getFirst().lastModified(),
+            linkInformation.metaInformation()
         );
         var subscribers = linkService.getLinkSubscribers(link.getId()).stream()
-                .map(TgChat::getId)
-                .toList();
+            .map(TgChat::getId)
+            .toList();
         linkInformation.events().reversed()
-                .forEach(event -> botClient.handleUpdates(new LinkUpdate(
-                        link.getId(),
-                        URI.create(link.getUrl()),
-                        event.type(),
-                        subscribers,
-                        event.additionalData()
-                )));
+            .forEach(event -> botClient.handleUpdates(new LinkUpdate(
+                link.getId(),
+                URI.create(link.getUrl()),
+                event.type(),
+                subscribers,
+                event.additionalData()
+            )));
     }
 
 }
