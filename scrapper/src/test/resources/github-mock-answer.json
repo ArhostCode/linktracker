@@ -7,6 +7,9 @@
             "name": "arhostcode/linktracker",
             "url": "https://api.github.com/repos/arhostcode/linktracker"
         },
+        "actor": {
+            "login": "arhostcode"
+        },
         "payload": {
             "repository_id": 753034583,
             "push_id": 17550268809,
@@ -38,6 +41,9 @@
             "id": 753034583,
             "name": "arhostcode/linktracker",
             "url": "https://api.github.com/repos/arhostcode/linktracker"
+        },
+        "actor": {
+            "login": "arhostcode"
         },
         "payload": {
             "action": "created",
