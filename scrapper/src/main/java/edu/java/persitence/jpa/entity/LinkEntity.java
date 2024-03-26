@@ -1,6 +1,6 @@
 package edu.java.persitence.jpa.entity;
 
-import edu.java.persitence.common.dto.Link;
+import edu.java.domain.dto.Link;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

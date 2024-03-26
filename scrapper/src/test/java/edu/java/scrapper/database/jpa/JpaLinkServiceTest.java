@@ -1,8 +1,8 @@
 package edu.java.scrapper.database.jpa;
 
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.dto.response.LinkResponse;
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
 import edu.java.provider.InformationProviders;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
