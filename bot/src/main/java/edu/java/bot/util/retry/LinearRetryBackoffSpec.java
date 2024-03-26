@@ -22,44 +22,11 @@ public class LinearRetryBackoffSpec extends Retry {
     private final Predicate<Throwable> errorFilter;
     private final Supplier<Scheduler> schedulerSupplier;
 
-    public LinearRetryBackoffSpec maxAttempts(int maxAttempts) {
-        return new LinearRetryBackoffSpec(
-            this.minBackoff,
-            this.maxBackoff,
-            this.factor,
-            maxAttempts,
-            this.errorFilter,
-            this.schedulerSupplier
-        );
-    }
-
     public LinearRetryBackoffSpec factor(double factor) {
         return new LinearRetryBackoffSpec(
             this.minBackoff,
             this.maxBackoff,
             factor,
-            this.maxAttempts,
-            this.errorFilter,
-            this.schedulerSupplier
-        );
-    }
-
-    public LinearRetryBackoffSpec minBackoff(Duration minBackoff) {
-        return new LinearRetryBackoffSpec(
-            minBackoff,
-            this.maxBackoff,
-            this.factor,
-            this.maxAttempts,
-            this.errorFilter,
-            this.schedulerSupplier
-        );
-    }
-
-    public LinearRetryBackoffSpec maxBackoff(Duration maxBackoff) {
-        return new LinearRetryBackoffSpec(
-            this.minBackoff,
-            maxBackoff,
-            this.factor,
             this.maxAttempts,
             this.errorFilter,
             this.schedulerSupplier
