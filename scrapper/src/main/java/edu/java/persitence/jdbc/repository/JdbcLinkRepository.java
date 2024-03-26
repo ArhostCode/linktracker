@@ -1,6 +1,6 @@
 package edu.java.persitence.jdbc.repository;
 
-import edu.java.persitence.common.dto.Link;
+import edu.java.domain.dto.Link;
 import edu.java.persitence.common.repository.LinkRepository;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -27,17 +27,20 @@ public class JdbcLinkRepository implements LinkRepository {
     @Override
     public Long add(Link link) {
         return client.sql("""
-                INSERT INTO
-                  link(url, description, updated_at, last_checked_at)
-                VALUES
-                  (:link, :description, :updated_at, :last_checked_at)
-                ON CONFLICT (url)
-                DO UPDATE SET updated_at = :updated_at, last_checked_at = :last_checked_at
-                RETURNING id""")
+                        INSERT INTO
+                          link(url, description, updated_at, last_checked_at, meta_information)
+                        VALUES
+                          (:link, :description, :updated_at, :last_checked_at, :meta_information)
+                        ON CONFLICT (url)
+                        DO UPDATE SET updated_at = :updated_at,
+                        last_checked_at = :last_checked_at,
+                        meta_information = :meta_information
+                        RETURNING id""")
             .param("link", link.getUrl())
             .param("description", link.getDescription())
             .param("updated_at", link.getUpdatedAt())
             .param("last_checked_at", link.getLastCheckedAt())
+            .param("meta_information", link.getMetaInformation())
             .query(Long.class)
             .single();
     }
@@ -86,11 +89,17 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public void update(long id, OffsetDateTime lastModified) {
-        client.sql("UPDATE link SET last_checked_at = :last_checked_at, updated_at = :updated_at WHERE id = :id")
+    public void update(long id, OffsetDateTime lastModified, String metaInformation) {
+        client.sql("""
+                UPDATE link
+                SET last_checked_at = :last_checked_at,
+                updated_at = :updated_at,
+                meta_information = :meta_information
+                WHERE id = :id""")
             .param("last_checked_at", OffsetDateTime.now())
             .param("updated_at", lastModified)
             .param("id", id)
+            .param("meta_information", metaInformation)
             .update();
     }
 

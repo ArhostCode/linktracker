@@ -5,6 +5,9 @@ import edu.java.persitence.common.service.DefaultLinkService;
 import edu.java.persitence.jdbc.repository.JdbcChatLinkRepository;
 import edu.java.persitence.jdbc.repository.JdbcChatRepository;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;
+import edu.java.persitence.jooq.repository.JooqChatLinkRepository;
+import edu.java.persitence.jooq.repository.JooqChatRepository;
+import edu.java.persitence.jooq.repository.JooqLinkRepository;
 import edu.java.provider.InformationProviders;
 import edu.java.service.ChatService;
 import edu.java.service.LinkService;
@@ -30,6 +33,26 @@ public class DatabaseConfiguration {
     public LinkService jdbcLinkService(
         JdbcLinkRepository linkRepository,
         JdbcChatLinkRepository tgChatLinkRepository,
+        InformationProviders informationProviders
+    ) {
+        return new DefaultLinkService(linkRepository, tgChatLinkRepository, informationProviders);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "database.accessor", havingValue = "jooq")
+    public ChatService jooqChatService(
+        JooqChatRepository tgChatRepository,
+        JooqChatLinkRepository tgChatLinkRepository,
+        JooqLinkRepository linkRepository
+    ) {
+        return new DefaultChatService(tgChatRepository, tgChatLinkRepository, linkRepository);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "database.accessor", havingValue = "jooq")
+    public LinkService jooqLinkService(
+        JooqLinkRepository linkRepository,
+        JooqChatLinkRepository tgChatLinkRepository,
         InformationProviders informationProviders
     ) {
         return new DefaultLinkService(linkRepository, tgChatLinkRepository, informationProviders);

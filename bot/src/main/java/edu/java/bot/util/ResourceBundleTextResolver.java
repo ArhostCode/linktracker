@@ -24,4 +24,13 @@ public class ResourceBundleTextResolver implements TextResolver {
             return messageId;
         }
     }
+
+    @Override
+    public String resolve(String messageId, Map<String, String> insertions, String defaultValue) {
+        String resolvedMessage = resolve(messageId, insertions);
+        if (resolvedMessage.equals(messageId)) {
+            return defaultValue;
+        }
+        return resolvedMessage;
+    }
 }

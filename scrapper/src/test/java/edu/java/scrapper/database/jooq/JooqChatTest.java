@@ -1,7 +1,7 @@
-package edu.java.scrapper.database;
+package edu.java.scrapper.database.jooq;
 
-import edu.java.persitence.common.dto.TgChat;
-import edu.java.persitence.jdbc.repository.JdbcChatRepository;
+import edu.java.domain.dto.TgChat;
+import edu.java.persitence.jooq.repository.JooqChatRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,26 +11,26 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-public class JdbcChatTest extends IntegrationEnvironment {
+public class JooqChatTest extends IntegrationEnvironment {
 
     @Autowired
-    private JdbcChatRepository jdbcChatRepository;
+    private JooqChatRepository jooqChatRepository;
 
     @Test
     @Transactional
     @Rollback
     void addShouldInsertChatInDatabase() {
-        jdbcChatRepository.add(123L);
-        Assertions.assertThat(jdbcChatRepository.findAll()).contains(new TgChat(123L));
+        jooqChatRepository.add(123L);
+        Assertions.assertThat(jooqChatRepository.findAll()).contains(new TgChat(123L));
     }
 
     @Test
     @Transactional
     @Rollback
     void removeShouldDeleteChatFromDatabase() {
-        jdbcChatRepository.add(123L);
-        jdbcChatRepository.remove(123L);
-        Assertions.assertThat(jdbcChatRepository.findAll()).doesNotContain(new TgChat(123L));
+        jooqChatRepository.add(123L);
+        jooqChatRepository.remove(123L);
+        Assertions.assertThat(jooqChatRepository.findAll()).doesNotContain(new TgChat(123L));
     }
 
 }

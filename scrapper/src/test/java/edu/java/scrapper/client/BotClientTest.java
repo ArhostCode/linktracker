@@ -8,6 +8,7 @@ import edu.java.dto.OptionalAnswer;
 import edu.java.dto.response.ApiErrorResponse;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class BotClientTest {
 
         BotClient botClient = botClient("http://localhost:9090");
         OptionalAnswer<Void> response = botClient.handleUpdates(
-            new LinkUpdate(100L, URI.create("https://article.com"), "description", List.of())
+            new LinkUpdate(100L, URI.create("https://article.com"), "description", List.of(), Map.of())
         );
         Assertions.assertThat(response).isNull();
     }
@@ -58,7 +59,7 @@ public class BotClientTest {
 
         BotClient scrapperClient = botClient("http://localhost:9090");
         ApiErrorResponse response = scrapperClient.handleUpdates(
-            new LinkUpdate(100L, URI.create("https://article.com"), "description", List.of())
+            new LinkUpdate(100L, URI.create("https://article.com"), "description", List.of(), Map.of())
         ).apiErrorResponse();
         Assertions.assertThat(response)
             .extracting(ApiErrorResponse::code)

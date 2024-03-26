@@ -1,7 +1,7 @@
 package edu.java.persitence.jdbc.repository;
 
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

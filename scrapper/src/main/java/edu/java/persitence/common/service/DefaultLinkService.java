@@ -1,11 +1,12 @@
 package edu.java.persitence.common.service;
 
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.exception.LinkAlreadyAddedException;
 import edu.java.exception.LinkIsNotSupportedException;
 import edu.java.exception.LinkNotFoundException;
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
 import edu.java.persitence.common.repository.LinkRepository;
 import edu.java.persitence.common.repository.TgChatLinkRepository;
 import edu.java.provider.InformationProviders;
@@ -39,6 +40,9 @@ public class DefaultLinkService implements LinkService {
     @Override
     @Transactional
     public LinkResponse addLink(URI link, Long tgChatId) {
+        if (linkRepository.findByUrl(link.toString()).isPresent()) {
+            throw new LinkAlreadyAddedException(link);
+        }
         InformationProvider provider = informationProviders.getProvider(link.getHost());
         if (provider == null || !provider.isSupported(link)) {
             throw new LinkIsNotSupportedException(link);
@@ -47,11 +51,16 @@ public class DefaultLinkService implements LinkService {
         if (linkInformation == null) {
             throw new LinkIsNotSupportedException(link);
         }
+        OffsetDateTime lastModified = OffsetDateTime.now();
+        if (!linkInformation.events().isEmpty()) {
+            lastModified = linkInformation.events().getFirst().lastModified();
+        }
         var id = linkRepository.add(Link.create(
             link.toString(),
             linkInformation.title(),
-            linkInformation.lastModified(),
-            OffsetDateTime.now()
+            lastModified,
+            OffsetDateTime.now(),
+            linkInformation.metaInformation()
         ));
         tgChatLinkRepository.add(tgChatId, id);
         return new LinkResponse(id, link);
@@ -79,11 +88,11 @@ public class DefaultLinkService implements LinkService {
     }
 
     @Override
-    public void update(long id, OffsetDateTime lastModified) {
+    public void update(long id, OffsetDateTime lastModified, String metaInformation) {
         if (linkRepository.findById(id).isEmpty()) {
             throw new LinkNotFoundException(id);
         }
-        linkRepository.update(id, lastModified);
+        linkRepository.update(id, lastModified, metaInformation);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package edu.java.bot.service;
 
-import com.pengrad.telegrambot.model.LinkPreviewOptions;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.client.scrapper.ScrapperClient;
@@ -30,16 +29,26 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
                     textResolver.resolve(
                         "link.update",
                         Map.of(
-                            "link", link.url().toString(),
-                            "description", link.description()
+                            "link",
+                            link.url().toString(),
+                            "description",
+                            textResolver.resolve(
+                                link.description(),
+                                link.metaInformation(),
+                                "Общее обновление информации"
+                            )
                         )
                     )
-                ).disableWebPagePreview(true)
-                    .linkPreviewOptions(new LinkPreviewOptions().isDisabled(true))
+                )
             );
             if (response.message() == null) {
                 scrapperClient.deleteChat(chatId);
             }
         });
     }
+
+    private String resolve(String template, Map<String, String> args) {
+        return textResolver.resolve(template, args);
+    }
+
 }

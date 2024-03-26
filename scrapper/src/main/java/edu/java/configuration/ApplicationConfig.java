@@ -10,13 +10,20 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
-    String githubToken
+    String githubToken,
+    StackOverflowCredentials stackOverflow
 ) {
     public record Scheduler(
         boolean enable,
         @NotNull Duration interval,
         @NotNull Duration forceCheckDelay,
         int maxLinksPerCheck
+    ) {
+    }
+
+    public record StackOverflowCredentials(
+        String key,
+        String accessToken
     ) {
     }
 }

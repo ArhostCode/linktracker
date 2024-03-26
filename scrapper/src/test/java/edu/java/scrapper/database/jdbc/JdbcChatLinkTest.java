@@ -1,7 +1,7 @@
-package edu.java.scrapper.database;
+package edu.java.scrapper.database.jdbc;
 
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatLinkRepository;
 import edu.java.persitence.jdbc.repository.JdbcChatRepository;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;
@@ -32,7 +32,7 @@ public class JdbcChatLinkTest extends IntegrationEnvironment {
         var id = jdbcLinkRepository.add(Link.create("google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.MAX));
         jdbcChatLinkRepository.add(123L, id);
         Assertions.assertThat(jdbcChatLinkRepository.findAllByChatId(123L)).contains(
-            new Link(id, "google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.MAX)
+            new Link(id, "google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.MAX, "")
         );
     }
 
@@ -57,7 +57,7 @@ public class JdbcChatLinkTest extends IntegrationEnvironment {
         jdbcChatLinkRepository.add(123L, id);
         jdbcChatLinkRepository.remove(123L, id);
         Assertions.assertThat(jdbcChatLinkRepository.findAllByChatId(123L)).doesNotContain(
-            new Link(id, "google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.MAX)
+            new Link(id, "google.com", "Google", OffsetDateTime.MIN, OffsetDateTime.MAX, "")
         );
     }
 

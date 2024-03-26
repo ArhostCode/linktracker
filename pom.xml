@@ -50,6 +50,7 @@
     <modules>
         <module>bot</module>
         <module>scrapper</module>
+        <module>scrapper-jooq</module>
     </modules>
 
     <dependencyManagement>
@@ -243,6 +244,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/domain/jooq/**</exclude>
+                        </excludes>
+                    </configuration>
                     <executions>
                         <execution>
                             <goals>
@@ -305,6 +311,7 @@
                         <consoleOutput>true</consoleOutput>
                         <logViolationsToConsole>true</logViolationsToConsole>
                         <failsOnError>true</failsOnError>
+                        <excludes>**/domain/jooq/**</excludes>
                     </configuration>
                 </plugin>
             </plugins>
