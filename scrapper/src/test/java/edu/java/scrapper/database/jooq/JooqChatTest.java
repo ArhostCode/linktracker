@@ -1,6 +1,6 @@
 package edu.java.scrapper.database.jooq;
 
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jooq.repository.JooqChatRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import org.assertj.core.api.Assertions;

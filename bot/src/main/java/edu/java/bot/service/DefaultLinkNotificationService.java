@@ -1,6 +1,5 @@
 package edu.java.bot.service;
 
-import com.pengrad.telegrambot.model.LinkPreviewOptions;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.client.scrapper.ScrapperClient;
@@ -40,8 +39,7 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
                             )
                         )
                     )
-                ).disableWebPagePreview(true)
-                    .linkPreviewOptions(new LinkPreviewOptions().isDisabled(true))
+                )
             );
             if (response.message() == null) {
                 scrapperClient.deleteChat(chatId);

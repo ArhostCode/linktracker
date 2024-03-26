@@ -10,7 +10,8 @@ public record GithubEventInfo(
     String type,
     RepositoryInfo repo,
     EventPayload payload,
-    Map<String, String> additionalData
+    Map<String, String> additionalData,
+    Actor actor
 ) {
     public record RepositoryInfo(String name) {
     }
@@ -31,6 +32,11 @@ public record GithubEventInfo(
 
     public record PullRequestEventPayload(
         String title
+    ) {
+    }
+
+    public record Actor(
+        String login
     ) {
     }
 
