@@ -1,9 +1,9 @@
 package edu.java.service;
 
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;

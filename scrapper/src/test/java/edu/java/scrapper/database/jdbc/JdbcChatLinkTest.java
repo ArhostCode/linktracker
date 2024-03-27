@@ -1,7 +1,7 @@
 package edu.java.scrapper.database.jdbc;
 
-import edu.java.persitence.common.dto.Link;
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.Link;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatLinkRepository;
 import edu.java.persitence.jdbc.repository.JdbcChatRepository;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;

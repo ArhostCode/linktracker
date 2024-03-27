@@ -1,6 +1,6 @@
 package edu.java.scrapper.database.jdbc;
 
-import edu.java.persitence.common.dto.TgChat;
+import edu.java.domain.dto.TgChat;
 import edu.java.persitence.jdbc.repository.JdbcChatRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import org.assertj.core.api.Assertions;

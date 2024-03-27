@@ -46,7 +46,11 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
             item -> new LinkUpdateEvent(
                 "github.push_event",
                 item.lastModified(),
-                Map.of("size", String.valueOf(item.payload().size()))
+                Map.of(
+                    "size", String.valueOf(item.payload().size()),
+                    "repo", String.valueOf(item.repo().name()),
+                    "user", String.valueOf(item.actor().login())
+                )
             )
         );
         registerCollector(
@@ -54,7 +58,10 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
             item -> new LinkUpdateEvent(
                 "github.issue_comment_event",
                 item.lastModified(),
-                Map.of("title", item.payload().issue().title())
+                Map.of(
+                    "title", item.payload().issue().title(),
+                    "user", String.valueOf(item.actor().login())
+                )
             )
         );
         registerCollector(
@@ -62,7 +69,10 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
             item -> new LinkUpdateEvent(
                 "github.issues_event",
                 item.lastModified(),
-                Map.of("title", item.payload().issue().title())
+                Map.of(
+                    "title", item.payload().issue().title(),
+                    "repo", String.valueOf(item.repo().name())
+                )
             )
         );
         registerCollector(
@@ -70,7 +80,10 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
             item -> new LinkUpdateEvent(
                 "github.pull_request_event",
                 item.lastModified(),
-                Map.of("title", item.payload().pullRequest().title())
+                Map.of(
+                    "title", item.payload().pullRequest().title(),
+                    "repo", String.valueOf(item.repo().name())
+                )
             )
         );
         registerCollector(
@@ -80,7 +93,8 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
                 item.lastModified(),
                 Map.of(
                     "ref", String.valueOf(item.payload().ref()),
-                    "ref_type", String.valueOf(item.payload().refType())
+                    "ref_type", String.valueOf(item.payload().refType()),
+                    "repo", String.valueOf(item.repo().name())
                 )
             )
         );

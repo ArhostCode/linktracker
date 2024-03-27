@@ -1,6 +1,6 @@
 package edu.java.scrapper.database.jdbc;
 
-import edu.java.persitence.common.dto.Link;
+import edu.java.domain.dto.Link;
 import edu.java.persitence.jdbc.repository.JdbcLinkRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.Duration;
