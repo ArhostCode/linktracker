@@ -6,6 +6,13 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
+    cache-names:
+      - rate-limit-bucket
 
 server:
   port: 8090
@@ -23,4 +30,24 @@ springdoc:
 retry:
   type: fixed
   max-attempts: 5
-  min-min_delay: 10s
+  min-delay: 10s
+  codes: 429, 500
+
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-bucket
+      url: .*
+      http-status-code: too_many_requests
+      rate-limits:
+        - bandwidths:
+            - capacity: 1000
+              time: 1
+              unit: hours
+              refill-speed: interval
+          cache-key: getRemoteAddr()
+          skip-condition: '@rateLimiterService.isSkipped(getRemoteAddr())'
+
+rate-limiter:
+  whitelist: ${WHITELISTED_IPS:localhost}

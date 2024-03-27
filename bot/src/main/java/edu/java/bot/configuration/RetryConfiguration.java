@@ -1,10 +1,10 @@
 package edu.java.bot.configuration;
 
+import edu.java.bot.util.retry.LinearRetryBackoffSpec;
+import edu.java.bot.util.retry.RetryPolicy;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Predicate;
-import edu.java.bot.util.retry.LinearRetryBackoffSpec;
-import edu.java.bot.util.retry.RetryPolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

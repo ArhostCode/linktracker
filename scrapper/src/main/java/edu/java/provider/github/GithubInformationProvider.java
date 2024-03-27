@@ -8,7 +8,6 @@ import edu.java.provider.github.model.GithubEventInfo;
 import edu.java.provider.github.model.GithubEventsHolder;
 import edu.java.util.retry.RetryFilterCreator;
 import edu.java.util.retry.RetryPolicy;
-import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -139,8 +138,4 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
         );
     }
 
-    @PostConstruct
-    public void init() {
-        fetchInformation(URI.create("https://github.com/ss/s"));
-    }
 }
