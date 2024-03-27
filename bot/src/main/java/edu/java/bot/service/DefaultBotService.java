@@ -6,8 +6,8 @@ import edu.java.bot.client.scrapper.dto.request.RemoveLinkRequest;
 import edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import edu.java.bot.client.scrapper.dto.response.ListLinksResponse;
 import edu.java.bot.dto.OptionalAnswer;
-import java.net.URI;
 import jakarta.annotation.PostConstruct;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
