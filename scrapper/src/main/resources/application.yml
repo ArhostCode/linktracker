@@ -51,12 +51,23 @@ springdoc:
     path: /swagger-ui
 
 retry:
-  type: linear
-  max-attempts: 5
-  factor: 2.0
-  min-delay: 5s
-  codes: 429, 500, 502
-  max-delay: 50s
+  targets:
+    - target: github
+      max-attempts: 5
+      type: exponential
+      min-delay: 1s
+      max-delay: 100s
+      codes: 404
+    - target: stackoverflow
+      max-attempts: 5
+      type: fixed
+      min-delay: 10s
+      codes: 429
+    - target: bot
+      max-attempts: 5
+      type: fixed
+      min-delay: 10s
+      codes: 429
 
 bucket4j:
   enabled: true

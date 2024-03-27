@@ -1,13 +1,13 @@
 package edu.java.provider.github;
 
 import edu.java.configuration.ApplicationConfig;
+import edu.java.configuration.RetryConfig;
 import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
 import edu.java.provider.github.model.GithubEventInfo;
 import edu.java.provider.github.model.GithubEventsHolder;
-import edu.java.util.retry.RetryFilterCreator;
-import edu.java.util.retry.RetryPolicy;
+import edu.java.util.retry.RetryFactory;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -29,7 +29,7 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
     public GithubInformationProvider(
         @Value("${provider.github.url}") String apiUrl,
         ApplicationConfig config,
-        RetryPolicy retryPolicy
+        RetryConfig retryConfig
     ) {
         super(WebClient.builder()
             .baseUrl(apiUrl)
@@ -38,7 +38,7 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
                     headers.set("Authorization", "Bearer " + config.githubToken());
                 }
             })
-            .filter(RetryFilterCreator.create(retryPolicy))
+            .filter(RetryFactory.createFilter(RetryFactory.createRetry(retryConfig, "github")))
             .build()
         );
         registerCollector(
@@ -151,5 +151,4 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
             realUpdates
         );
     }
-
 }

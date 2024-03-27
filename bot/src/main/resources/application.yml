@@ -28,10 +28,13 @@ springdoc:
     path: /swagger-ui
 
 retry:
-  type: fixed
-  max-attempts: 5
-  min-delay: 10s
-  codes: 429, 500
+  targets:
+    - target: scrapper
+      max-attempts: 5
+      type: exponential
+      min-delay: 1s
+      max-delay: 100s
+      codes: 404
 
 
 bucket4j:

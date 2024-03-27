@@ -2,15 +2,16 @@ package edu.java.scrapper.provider.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.configuration.ApplicationConfig;
-import edu.java.util.retry.RetryPolicy;
+import edu.java.configuration.RetryConfig;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import java.net.URI;
+import java.time.Duration;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import reactor.util.retry.Retry;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
@@ -26,7 +27,18 @@ public class GithubInformationProviderTest {
         null,
         null
     );
-    private static final RetryPolicy RETRY_POLICY = new RetryPolicy(Retry.max(1));
+    private static final RetryConfig RETRY_CONFIG = new RetryConfig(
+        List.of(new RetryConfig.RetryElement(
+                "github",
+                "fixed",
+                1,
+                1,
+                Duration.ofSeconds(1),
+                null,
+                List.of(404)
+            )
+        )
+    );
 
     @BeforeAll
     public static void setUp() {
@@ -49,7 +61,7 @@ public class GithubInformationProviderTest {
             new GithubInformationProvider(
                 server.baseUrl(),
                 EMPTY_CONFIG,
-                RETRY_POLICY
+                RETRY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
@@ -67,7 +79,7 @@ public class GithubInformationProviderTest {
             new GithubInformationProvider(
                 server.baseUrl(),
                 EMPTY_CONFIG,
-                RETRY_POLICY
+                RETRY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
@@ -80,7 +92,7 @@ public class GithubInformationProviderTest {
             new GithubInformationProvider(
                 server.baseUrl(),
                 EMPTY_CONFIG,
-                RETRY_POLICY
+                RETRY_CONFIG
             );
         var info = provider.isSupported(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
@@ -93,7 +105,7 @@ public class GithubInformationProviderTest {
             new GithubInformationProvider(
                 server.baseUrl(),
                 EMPTY_CONFIG,
-                RETRY_POLICY
+                RETRY_CONFIG
             );
         var info = provider.isSupported(new URI("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();

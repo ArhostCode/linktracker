@@ -1,9 +1,9 @@
 package edu.java.provider.api;
 
-import edu.java.util.retry.RetryFilterCreator;
-import edu.java.util.retry.RetryPolicy;
+import edu.java.util.retry.RetryFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 public abstract class WebClientInformationProvider implements InformationProvider {
 
@@ -17,10 +17,10 @@ public abstract class WebClientInformationProvider implements InformationProvide
         this(WebClient.create(apiUrl));
     }
 
-    public WebClientInformationProvider(String apiUrl, RetryPolicy retryPolicy) {
+    public WebClientInformationProvider(String apiUrl, Retry retry) {
         this(WebClient.builder()
             .baseUrl(apiUrl)
-            .filter(RetryFilterCreator.create(retryPolicy))
+            .filter(RetryFactory.createFilter(retry))
             .build()
         );
     }
