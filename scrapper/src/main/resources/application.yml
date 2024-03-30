@@ -56,18 +56,18 @@ retry:
       max-attempts: 5
       type: exponential
       min-delay: 1s
-      max-delay: 100s
-      codes: 404
+      max-delay: 10s
+      codes: 500
     - target: stackoverflow
       max-attempts: 5
       type: fixed
       min-delay: 10s
-      codes: 429
+      codes: 500
     - target: bot
       max-attempts: 5
-      type: fixed
-      min-delay: 10s
-      codes: 429
+      type: linear
+      min-delay: 5s
+      codes: 500
 
 bucket4j:
   enabled: true
