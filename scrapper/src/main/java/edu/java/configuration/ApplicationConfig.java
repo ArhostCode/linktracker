@@ -12,7 +12,9 @@ public record ApplicationConfig(
     Scheduler scheduler,
     String githubToken,
     StackOverflowCredentials stackOverflow,
-    AccessType databaseAccessType
+    AccessType databaseAccessType,
+    KafkaConfiguration kafka,
+    boolean useQueue
 ) {
     public record Scheduler(
         boolean enable,
@@ -30,5 +32,10 @@ public record ApplicationConfig(
 
     public enum AccessType {
         JDBC, JPA, JOOQ
+    }
+
+    public record KafkaConfiguration(
+        String updatesTopicName
+    ) {
     }
 }

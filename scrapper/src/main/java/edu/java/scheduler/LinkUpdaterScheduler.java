@@ -1,6 +1,5 @@
 package edu.java.scheduler;
 
-import edu.java.client.bot.BotClient;
 import edu.java.client.bot.request.LinkUpdate;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.domain.dto.Link;
@@ -9,6 +8,7 @@ import edu.java.provider.InformationProviders;
 import edu.java.provider.api.InformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.service.LinkService;
+import edu.java.service.LinkUpdateSender;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +23,7 @@ public class LinkUpdaterScheduler {
     private final LinkService linkService;
     private final ApplicationConfig appConfig;
     private final InformationProviders informationProviders;
-    private final BotClient botClient;
+    private final LinkUpdateSender sender;
 
     @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
     public void update() {
@@ -54,7 +54,7 @@ public class LinkUpdaterScheduler {
             .map(TgChat::getId)
             .toList();
         linkInformation.events().reversed()
-            .forEach(event -> botClient.handleUpdates(new LinkUpdate(
+            .forEach(event -> sender.sendUpdate(new LinkUpdate(
                 link.getId(),
                 URI.create(link.getUrl()),
                 event.type(),

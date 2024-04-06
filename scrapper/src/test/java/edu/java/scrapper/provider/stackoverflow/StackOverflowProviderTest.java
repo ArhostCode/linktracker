@@ -25,7 +25,9 @@ public class StackOverflowProviderTest {
         null,
         null,
         new ApplicationConfig.StackOverflowCredentials(null, null),
-        null
+        null,
+        null,
+        false
     );
     private static final RetryConfig RETRY_CONFIG = new RetryConfig(
         List.of(new RetryConfig.RetryElement(
