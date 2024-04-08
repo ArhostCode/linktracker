@@ -47,8 +47,4 @@ public class DefaultLinkNotificationService implements LinkNotificationService {
         });
     }
 
-    private String resolve(String template, Map<String, String> args) {
-        return textResolver.resolve(template, args);
-    }
-
 }
