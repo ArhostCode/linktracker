@@ -77,18 +77,18 @@ springdoc:
 
 retry:
   targets:
-    - target: github
+    github:
       max-attempts: 5
       type: exponential
       min-delay: 1s
       max-delay: 10s
       codes: 500
-    - target: stackoverflow
+    stackoverflow:
       max-attempts: 5
       type: fixed
       min-delay: 10s
       codes: 500
-    - target: bot
+    bot:
       max-attempts: 5
       type: linear
       min-delay: 5s

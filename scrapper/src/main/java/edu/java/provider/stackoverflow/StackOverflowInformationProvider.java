@@ -8,7 +8,6 @@ import edu.java.provider.api.EventCollectableInformationProvider;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.api.LinkUpdateEvent;
 import edu.java.provider.stackoverflow.model.StackOverflowItem;
-import edu.java.util.retry.RetryFactory;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class StackOverflowInformationProvider extends EventCollectableInformatio
         ObjectMapper mapper,
         RetryConfig retryConfig
     ) {
-        super(apiUrl, RetryFactory.createRetry(retryConfig, "stackoverflow"));
+        super(apiUrl, retryConfig, "stackoverflow");
         this.mapper = mapper;
         registerCollector(
             "AnswerEvent",

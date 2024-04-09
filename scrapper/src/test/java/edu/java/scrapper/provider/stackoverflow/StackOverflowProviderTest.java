@@ -9,6 +9,7 @@ import edu.java.provider.stackoverflow.StackOverflowInformationProvider;
 import java.net.URI;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,8 +31,7 @@ public class StackOverflowProviderTest {
         false
     );
     private static final RetryConfig RETRY_CONFIG = new RetryConfig(
-        List.of(new RetryConfig.RetryElement(
-                "stackoverflow",
+        Map.of("stackoverflow", new RetryConfig.RetryElement(
                 "fixed",
                 1,
                 1,

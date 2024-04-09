@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import reactor.core.publisher.Mono;
-import reactor.util.retry.Retry;
 
 @Configuration
 @EnableScheduling
@@ -25,11 +24,10 @@ public class ClientConfiguration {
 
     @Bean
     public BotClient botClient(RetryConfig retryConfig) {
-        Retry retry = RetryFactory.createRetry(retryConfig, "bot");
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
             .defaultHeader("Content-Type", "application/json")
-            .filter(RetryFactory.createFilter(retry))
+            .filter(RetryFactory.createFilter(retryConfig, "bot"))
             .baseUrl(botUrl).build();
 
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory

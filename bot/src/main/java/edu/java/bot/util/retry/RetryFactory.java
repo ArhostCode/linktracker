@@ -45,12 +45,12 @@ public class RetryFactory {
                 } else {
                     return Mono.just(clientResponse);
                 }
-            }).retryWhen(RetryFactory.createRetry(config, target));
+            }).retryWhen(createRetry(config, target));
     }
 
     public static Retry createRetry(RetryConfig config, String target) {
-        RetryConfig.RetryElement retryElement = config.targets().get(target);
-        return RETRY_BUILDERS.get(retryElement.type()).apply(retryElement);
+        RetryConfig.RetryElement element = config.targets().get(target);
+        return RETRY_BUILDERS.get(element.type()).apply(element);
     }
 
     private static Predicate<Throwable> buildErrorFilter(List<Integer> retryCodes) {
