@@ -2,10 +2,12 @@ package edu.java.persitence.jpa.service;
 
 import edu.java.exception.ChatAlreadyRegisteredException;
 import edu.java.exception.ChatNotFoundException;
+import edu.java.persitence.jpa.entity.LinkEntity;
 import edu.java.persitence.jpa.entity.TgChatEntity;
 import edu.java.persitence.jpa.repository.JpaChatRepository;
 import edu.java.persitence.jpa.repository.JpaLinkRepository;
 import edu.java.service.ChatService;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +30,14 @@ public class JpaChatService implements ChatService {
     @Transactional
     public void deleteChat(Long chatId) {
         var tgChat = tgChatRepository.findById(chatId).orElseThrow(() -> new ChatNotFoundException(chatId));
+        var forRemove = new ArrayList<LinkEntity>();
         for (var link : tgChat.getLinks()) {
             tgChat.removeLink(link);
             if (link.getTgChats().isEmpty()) {
-                linkRepository.delete(link);
+                forRemove.add(link);
             }
         }
+        linkRepository.deleteAll(forRemove);
         tgChatRepository.delete(tgChat);
     }
 }
