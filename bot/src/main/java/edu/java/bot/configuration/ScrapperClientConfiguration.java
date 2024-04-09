@@ -23,7 +23,7 @@ public class ScrapperClientConfiguration {
         WebClient webClient = WebClient.builder()
             .defaultStatusHandler(httpStatusCode -> true, clientResponse -> Mono.empty())
             .defaultHeader("Content-Type", "application/json")
-            .filter(RetryFactory.createFilter(RetryFactory.createRetry(config, "scrapper")))
+            .filter(RetryFactory.createFilter(config, "scrapper"))
             .baseUrl(scrapperUrl).build();
 
         HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory

@@ -62,7 +62,7 @@ springdoc:
 
 retry:
   targets:
-    - target: scrapper
+    scrapper:
       max-attempts: 5
       type: exponential
       min-delay: 1s
