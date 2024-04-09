@@ -1,11 +1,11 @@
 package edu.java.provider.api;
 
+import edu.java.configuration.RetryConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.Getter;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.util.retry.Retry;
 
 @Getter
 public abstract class EventCollectableInformationProvider<T> extends WebClientInformationProvider {
@@ -20,8 +20,8 @@ public abstract class EventCollectableInformationProvider<T> extends WebClientIn
         super(apiUrl);
     }
 
-    public EventCollectableInformationProvider(String apiUrl, Retry retry) {
-        super(apiUrl, retry);
+    public EventCollectableInformationProvider(String apiUrl, RetryConfig config, String target) {
+        super(apiUrl, config, target);
     }
 
     public void registerCollector(String type, Function<T, LinkUpdateEvent> collector) {

@@ -36,21 +36,21 @@ public class RetryFactory {
         );
     }
 
-    public static ExchangeFilterFunction createFilter(Retry retry) {
+    public static ExchangeFilterFunction createFilter(RetryConfig config, String target) {
         return (response, next) -> next.exchange(response)
             .flatMap(clientResponse -> {
-                if (clientResponse.statusCode().isError()) {
+                if (clientResponse.statusCode().isError()
+                    && config.targets().get(target).codes().contains(clientResponse.statusCode().value())) {
                     return clientResponse.createError();
                 } else {
                     return Mono.just(clientResponse);
                 }
-            }).retryWhen(retry);
+            }).retryWhen(createRetry(config, target));
     }
 
     public static Retry createRetry(RetryConfig config, String target) {
-        return config.targets().stream().filter(element -> element.target().equals(target)).findFirst()
-            .map(element -> RETRY_BUILDERS.get(element.type()).apply(element))
-            .orElseThrow(() -> new IllegalStateException("Unknown target " + target));
+        RetryConfig.RetryElement element = config.targets().get(target);
+        return RETRY_BUILDERS.get(element.type()).apply(element);
     }
 
     private static Predicate<Throwable> buildErrorFilter(List<Integer> retryCodes) {

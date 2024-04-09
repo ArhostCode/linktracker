@@ -38,7 +38,7 @@ public class GithubInformationProvider extends EventCollectableInformationProvid
                     headers.set("Authorization", "Bearer " + config.githubToken());
                 }
             })
-            .filter(RetryFactory.createFilter(RetryFactory.createRetry(retryConfig, "github")))
+            .filter(RetryFactory.createFilter(retryConfig, "github"))
             .build()
         );
         registerCollector(
