@@ -42,8 +42,7 @@ jobs:
           context: bot/
           file: bot/bot.Dockerfile
           push: true
-          tags: latest
-          labels: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
