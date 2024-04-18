@@ -17,7 +17,7 @@ spring:
       - rate-limit-bucket
   kafka:
     consumer:
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: ${KAFKA_URL:localhost:29092}
       group-id: bot
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -30,14 +30,14 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.add.type.headers: false
-      bootstrap-servers: localhost:29092
-    bootstrap-servers: localhost:29092
+      bootstrap-servers: ${KAFKA_URL:localhost:29092}
+    bootstrap-servers: ${KAFKA_URL:localhost:29092}
 
 server:
   port: 8090
 
 scrapper:
-  url: http://localhost:8080
+  url: ${SCRAPPER_URL:http://localhost:8080}
 
 management:
   metrics:
