@@ -26,7 +26,9 @@ public class GithubInformationProviderTest {
         null,
         null,
         null,
-        null
+        null,
+        null,
+        false
     );
     private static final RetryConfig RETRY_CONFIG = new RetryConfig(
         Map.of("github", new RetryConfig.RetryElement(

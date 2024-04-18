@@ -9,6 +9,9 @@ app:
     key: ${STACKOVERFLOW_KEY}
     access-token: ${STACKOVERFLOW_ACCESS_TOKEN}
   database-access-type: jpa
+  kafka:
+    updates-topic-name: updates
+  use-queue: true
 
 provider:
   github:
@@ -36,7 +39,14 @@ spring:
       spec: maximumSize=100000,expireAfterAccess=3600s
     cache-names:
       - rate-limit-bucket
-
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: localhost:29092
+      properties:
+        spring.json.add.type.headers: false
 bot:
   url: http://localhost:8090
 

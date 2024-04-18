@@ -1,5 +1,7 @@
 app:
   telegram-token: ${TELEGRAM_TOKEN}
+  kafka:
+    updates-topic-name: updates
 
 spring:
   application:
@@ -13,6 +15,23 @@ spring:
       spec: maximumSize=100000,expireAfterAccess=3600s
     cache-names:
       - rate-limit-bucket
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: bot
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: edu.java.bot.dto.request.LinkUpdate
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+      bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:29092
 
 server:
   port: 8090
