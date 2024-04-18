@@ -2,9 +2,13 @@ package edu.java.scrapper.provider.github;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.configuration.ApplicationConfig;
+import edu.java.configuration.RetryConfig;
 import edu.java.provider.api.LinkInformation;
 import edu.java.provider.github.GithubInformationProvider;
 import java.net.URI;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +27,17 @@ public class GithubInformationProviderTest {
         null,
         null,
         null
+    );
+    private static final RetryConfig RETRY_CONFIG = new RetryConfig(
+        Map.of("github", new RetryConfig.RetryElement(
+                "fixed",
+                1,
+                1,
+                Duration.ofSeconds(1),
+                null,
+                List.of(404)
+            )
+        )
     );
 
     @BeforeAll
@@ -45,7 +60,8 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG
+                EMPTY_CONFIG,
+                RETRY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/arhostcode/linktracker"));
         Assertions.assertThat(info)
@@ -62,7 +78,8 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG
+                EMPTY_CONFIG,
+                RETRY_CONFIG
             );
         var info = provider.fetchInformation(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isNull();
@@ -74,7 +91,8 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG
+                EMPTY_CONFIG,
+                RETRY_CONFIG
             );
         var info = provider.isSupported(new URI("https://github.com/jij/hih"));
         Assertions.assertThat(info).isTrue();
@@ -86,7 +104,8 @@ public class GithubInformationProviderTest {
         GithubInformationProvider provider =
             new GithubInformationProvider(
                 server.baseUrl(),
-                EMPTY_CONFIG
+                EMPTY_CONFIG,
+                RETRY_CONFIG
             );
         var info = provider.isSupported(new URI("https://gitlab.com/jij/hih"));
         Assertions.assertThat(info).isFalse();

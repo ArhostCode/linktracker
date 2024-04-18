@@ -1,5 +1,6 @@
 package edu.java.provider.api;
 
+import edu.java.configuration.RetryConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -17,6 +18,10 @@ public abstract class EventCollectableInformationProvider<T> extends WebClientIn
 
     public EventCollectableInformationProvider(String apiUrl) {
         super(apiUrl);
+    }
+
+    public EventCollectableInformationProvider(String apiUrl, RetryConfig config, String target) {
+        super(apiUrl, config, target);
     }
 
     public void registerCollector(String type, Function<T, LinkUpdateEvent> collector) {

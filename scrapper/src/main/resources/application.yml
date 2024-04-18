@@ -29,6 +29,13 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
+    cache-names:
+      - rate-limit-bucket
 
 bot:
   url: http://localhost:8090
@@ -42,3 +49,40 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+retry:
+  targets:
+    github:
+      max-attempts: 5
+      type: exponential
+      min-delay: 1s
+      max-delay: 10s
+      codes: 500
+    stackoverflow:
+      max-attempts: 5
+      type: fixed
+      min-delay: 10s
+      codes: 500
+    bot:
+      max-attempts: 5
+      type: linear
+      min-delay: 5s
+      codes: 500
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-bucket
+      url: .*
+      http-status-code: too_many_requests
+      rate-limits:
+        - bandwidths:
+            - capacity: 1000
+              time: 1
+              unit: hours
+              refill-speed: interval
+          cache-key: getRemoteAddr()
+          skip-condition: '@rateLimiterService.isSkipped(getRemoteAddr())'
+
+rate-limiter:
+  whitelist: ${WHITELISTED_IPS:localhost}
