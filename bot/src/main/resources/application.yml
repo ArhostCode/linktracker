@@ -39,6 +39,20 @@ server:
 scrapper:
   url: http://localhost:8080
 
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  server:
+    port: 8001
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: /metrics
+      base-path: '/'
+
 logging:
   config: classpath:log4j2-plain.xml
 
