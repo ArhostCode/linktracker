@@ -25,7 +25,7 @@ spring:
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/scrapper
+    url: jdbc:postgresql://${POSTGRESQL_HOST:localhost:5432}/scrapper
     username: postgres
     password: postgres
   jpa:
@@ -40,15 +40,15 @@ spring:
     cache-names:
       - rate-limit-bucket
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${KAFKA_URL:localhost:29092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: ${KAFKA_URL:localhost:29092}
       properties:
         spring.json.add.type.headers: false
 bot:
-  url: http://localhost:8090
+  url: ${BOT_URL:http://localhost:8090}
 
 management:
   metrics:
